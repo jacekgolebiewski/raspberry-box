@@ -24,9 +24,9 @@ export class LedMatrixService {
         }
     }
 
-    display(matrix: Array<Array<number>>): void {
-        this.matrixDriver.reset(this.CONTROLLER_NUMBER);
-        this.matrixDriver.set(this.CONTROLLER_NUMBER, matrix);
+    async display(matrix: Array<Array<number>>) {
+        await this.matrixDriver.reset(this.CONTROLLER_NUMBER);
+        await this.matrixDriver.set(this.CONTROLLER_NUMBER, matrix);
     }
 
 }

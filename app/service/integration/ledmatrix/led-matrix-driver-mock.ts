@@ -7,11 +7,11 @@ export class LedMatrixDriverMock {
         Logger.info(`LedMatrixDriverMock(${JSON.stringify(options)})`)
     }
 
-    reset(controllerNumber: number) {
+    async reset(controllerNumber: number) {
         Logger.info(`reset(controllerNumber=${JSON.stringify(controllerNumber)})`)
     }
 
-    set(controllerNumber: number, matrix: Array<Array<number>>) {
+    async set(controllerNumber: number, matrix: Array<Array<number>>) {
         Logger.info(`reset(set=${JSON.stringify(controllerNumber)}, matrix=...)`);
         matrix.forEach(row => {
             Logger.debug(JSON.stringify(row));
