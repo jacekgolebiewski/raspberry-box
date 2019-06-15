@@ -4,6 +4,8 @@ import * as http from 'http';
 import { Component } from '../component/component';
 import { WebSocketClient } from './web-socket-client';
 import { Application } from './application';
+import { ApplicationConfig } from '../shared/constants/config/application-config';
+import { ConfigKey } from '../shared/constants/config/config-key';
 
 @Component.default
 export class WebSocketEndpoint {
@@ -29,8 +31,10 @@ export class WebSocketEndpoint {
             new Application(new WebSocketClient(ws));
         });
 
-        this.server.listen(9001, function () {
-            console.log('Example app listening on port 3000!');
+        const PORT = ApplicationConfig.get(ConfigKey.DEFAULT_PORT);
+
+        this.server.listen(PORT, function () {
+            console.log(`Example app listening on port ${PORT}!`);
         });
     }
 

@@ -19,7 +19,7 @@ export class ApplicationConfig {
     private static init() {
         ApplicationConfig.props[ConfigKey.VERSION] = 'v1.0';
         ApplicationConfig.props[ConfigKey.LOG_LINE_LIMIT] = 200;
-        ApplicationConfig.props[ConfigKey.DEFAULT_PORT] = 3000;
+        ApplicationConfig.props[ConfigKey.DEFAULT_PORT] = 9001;
         ApplicationConfig.props[ConfigKey.RUNTIME_DATA_DIR] = '.runtime_data';
 
         if(EnvironmentUtil.currentEnvironment === Environment.DEV) {
