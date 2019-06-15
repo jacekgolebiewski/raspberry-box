@@ -6,8 +6,7 @@
   "types": "dist/index",
   "scripts": {
     "test": "mocha --require ts-node/register app/**/*.ts",
-    "start": "./node_modules/.bin/ts-node app/index.ts",
-    "start-prod": "node app.js"
+    "start": "./node_modules/.bin/ts-node app/index.ts"
   },
   "author": "jacekgolebiewski",
   "license": "MIT",
@@ -32,6 +31,7 @@
     "typescript": "^2.9.2"
   },
   "optionalDependencies": {
+    "max7219-display": "^1.0.4",
     "rpio": "^0.9.20"
   }
 }
