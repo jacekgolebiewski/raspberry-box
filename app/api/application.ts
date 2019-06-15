@@ -45,7 +45,7 @@ export class Application {
 
     onScreenRequest(request: ScreenRequest): void {
         Logger.info(`onScreenRequest(...)`);
-        this.ledMatrixService.display(request.matrix);
+        this.ledMatrixService.custom(request.matrix);
     }
 
     //TODO jg: build sendMessage Response for buttons
