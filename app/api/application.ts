@@ -38,6 +38,7 @@ export class Application {
     }
 
     initButton(pin: number): void {
+        Logger.debug('Initializing pin ' + pin);
         this.gpioService.openIN(pin);
         this.gpioService.poll(pin, (val) => {
             Logger.debug('Pressed button ' + pin);
