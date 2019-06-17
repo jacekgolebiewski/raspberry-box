@@ -19,10 +19,8 @@ export class App {
     async start() {
         Logger.critical(`Running with Environment.${EnvironmentUtil.currentEnvironment}`);
         AppBanner.printTitle();
-        ComponentService.initComponents(App.eagerComponents);
-
-        //TODO jg: think about switching with eagerComponents
         this.configureGpioService();
+        ComponentService.initComponents(App.eagerComponents);
     }
 
     private configureGpioService() {
