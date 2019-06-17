@@ -12,7 +12,7 @@ import { TimeUtil } from '../../../shared/utils/time-util';
 @Component.default
 export class GpioService {
 
-    readonly ALL_GPIO = [4, 5, 6, 12, 13, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27];
+    readonly ALL_GPIO = [4, 5, 6, 12, 13, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29];
 
     private GPIO_PWM_RANGE = 1000;
     private GPIO_PWM_DEFAULT_FREQUENCY_DIVIDER = 64;
