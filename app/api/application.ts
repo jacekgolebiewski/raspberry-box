@@ -23,7 +23,7 @@ export class Application {
     ]);
 
     pinToButton: Map<number, Button> = new Map([
-        [26, Button.A],
+        [3, Button.A],
         [27, Button.B]
     ]);
 
