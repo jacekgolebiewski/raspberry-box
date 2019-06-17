@@ -96,7 +96,7 @@ export class GpioService {
     }
 
     poll(id: number, cb: (nVal) => any) {
-        this.clearPoll(id);
+        //this.clearPoll(id); //TODO jg: should consider checking if pin is polling
         this.rpio.poll(id, (pin: number) => {
             cb && cb(this.read(pin));
         });
