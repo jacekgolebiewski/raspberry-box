@@ -23,8 +23,8 @@ export class Application {
     ]);
 
     pinToButton: Map<number, Button> = new Map([
-        [28, Button.A],
-        [29, Button.B]
+        [26, Button.A],
+        [27, Button.B]
     ]);
 
     constructor(public webSocketClient: WebSocketClient) {
