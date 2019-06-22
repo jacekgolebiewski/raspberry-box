@@ -44,8 +44,9 @@ export class Application {
         });
 
         this.systemService.onExit((done: Function) => {
+            Logger.info("onExit, closing pin 16");
             rpio.poll(16, undefined);
-            rpio.close(16)
+            rpio.close(16);
             done.apply(this);
         });
 
