@@ -42,6 +42,7 @@ export class Application {
 
     initButton(pin: number): void {
         const _this = this;
+        const rpio = this.gpioService.rpio;
         Logger.debug('Initializing pin ' + pin);
         rpio.open(pin, rpio.INPUT, rpio.PULL_DOWN);
 
