@@ -43,9 +43,9 @@ export class Application {
         this.gpioService.openIN(pin);
         this.gpioService.poll(pin, function(val) {
             Logger.debug('Pressed button ' + pin);
-            _this.onButtonStateChange(
+            /*_this.onButtonStateChange(
                 _this.pinToButton.get(pin),
-                val === 1 ? ButtonAction.PRESSED : ButtonAction.RELEASED)
+                val === 1 ? ButtonAction.PRESSED : ButtonAction.RELEASED)*/
         });
     }
 
