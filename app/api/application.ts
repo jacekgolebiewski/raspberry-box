@@ -47,6 +47,10 @@ export class Application {
                 [_this.pinToButton.get(pin),
                 val === 1 ? ButtonAction.PRESSED : ButtonAction.RELEASED]);
         });
+        setTimeout(() => {
+            Logger.debug('Disabling poll: ' + pin);
+            this.gpioService.poll(pin, undefined);
+        }, 1000)
     }
 
     onConnected(webSocketClient: WebSocketClient): any {
