@@ -37,8 +37,10 @@ export class App {
     }
 
     private startEndpoint() {
-        this.webSocketEndpoint = new WebSocketEndpoint();
-        this.webSocketEndpoint.init();
+        setTimeout(() => {
+            this.webSocketEndpoint = new WebSocketEndpoint();
+            this.webSocketEndpoint.init();
+        }, 1000);
     }
 }
 
