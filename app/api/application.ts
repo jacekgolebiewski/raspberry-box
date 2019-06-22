@@ -46,7 +46,7 @@ export class Application {
 
     initButton(pin: number): void {
         Logger.debug('Initializing pin ' + pin);
-        this.gpioService.openIN(pin);
+        /*this.gpioService.openIN(pin);
         this.gpioService.rpio.msleep(500);
         this.gpioService.poll(pin, (val) => {
             Logger.debug('Pressed button ' + pin);
@@ -54,7 +54,7 @@ export class Application {
             this.onButtonStateChange(
                 this.pinToButton.get(pin),
                 val === 1 ? ButtonAction.PRESSED : ButtonAction.RELEASED)
-        });
+        });*/
     }
 
     private onButtonStateChange(button: Button, action: ButtonAction) {
