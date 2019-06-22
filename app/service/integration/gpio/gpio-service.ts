@@ -27,7 +27,7 @@ export class GpioService {
 
     init() {
         Logger.debug(JSON.stringify(this.OPTIONS));
-        this.rpio.init(this.OPTIONS);
+        // this.rpio.init(this.OPTIONS);
         //this.rpio.pwmSetClockDivider(this.GPIO_PWM_DEFAULT_FREQUENCY_DIVIDER); //300kHz
     }
 

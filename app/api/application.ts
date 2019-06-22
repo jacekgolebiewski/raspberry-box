@@ -36,7 +36,12 @@ export class Application {
     }
 
     init() {
-        this.initButton(27)
+        const rpio = this.gpioService.rpio;
+        rpio.init({
+            gpiomem: false, // required for: i²c, PWM, SPI
+                mapping: 'physical' // pin number = gpio number
+        });
+        this.initButton(36)
         // this.pinToButton.forEach((value, key) => this.initButton(key));
     }
 
