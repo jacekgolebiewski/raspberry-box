@@ -46,13 +46,6 @@ export class Application {
 
     initButton(pin: number): void {
         Logger.debug('Initializing pin ' + pin);
-/*
-        const rpio = this.gpioService.rpio;
-        rpio.open(16, rpio.INPUT)
-        rpio.poll(16, (pin) => {
-            console.log("changed!");
-        })
-*/
         this.gpioService.openIN(pin);
         this.gpioService.poll(pin, (val) => {
             Logger.debug('Pressed button ' + pin);
@@ -70,6 +63,7 @@ export class Application {
     }
 
     onRequest(request: Request): void {
+        Logger.debug(`onRequest:request.type = ${request.type}`);
         let handler = this.handlers.get(request.type);
         if (handler !== undefined) {
             handler(request);

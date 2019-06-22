@@ -11,7 +11,7 @@ export class WebSocketClient {
 
     public init() {
         this.webSocket.on('message', (message: string) => {
-            Logger.debug(`received: ${message}`);
+            Logger.trace(`received: ${message}`);
             if (this.onRequest !== undefined) {
                 this.onRequest(JSON.parse(message))
             }

@@ -11,6 +11,8 @@ export class LedMatrixService {
 
     matrixDriver: LedMatrixDriverMock;
 
+    isWorking = false;
+
     constructor() {
         this.init();
     }
@@ -26,8 +28,13 @@ export class LedMatrixService {
     }
 
     async custom(matrix: Array<Array<number>>) {
-        await this.matrixDriver.reset(this.CONTROLLER_NUMBER);
+        if(this.isWorking) {
+            Logger.warn("Tried simultaneous access to screen, rejected!");
+            return;
+        }
+        this.isWorking = true;
         await this.matrixDriver.set(this.CONTROLLER_NUMBER, matrix);
+        this.isWorking = false;
     }
 
     async char(character: string) {
