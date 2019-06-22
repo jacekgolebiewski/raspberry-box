@@ -33,6 +33,7 @@ export class LedMatrixService {
             return;
         }
         this.isWorking = true;
+        await this.matrixDriver.reset(this.CONTROLLER_NUMBER);
         await this.matrixDriver.set(this.CONTROLLER_NUMBER, matrix);
         this.isWorking = false;
     }
