@@ -18,7 +18,12 @@ export class LedMatrixService {
     }
 
     init() {
-        let options = new LedMatrixOptions();
+        let options = {
+            device: '/dev/spidev0.0',
+            controllerCount: 1,
+            flip: 'vertical',
+            rotate: 270
+        };
         if (EnvironmentUtil.isProduction()) {
             let Max7219 = require('max7219-display');
             this.matrixDriver = new Max7219(options);
