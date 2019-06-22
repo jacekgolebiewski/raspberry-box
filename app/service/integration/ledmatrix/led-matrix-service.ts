@@ -1,8 +1,8 @@
 import { Component } from '../../../component/component';
 import { EnvironmentUtil } from '../../../shared/utils/environment-util';
-import { LedMatrixOptions } from './led-matrix-options';
 import { LedMatrixDriverMock } from './led-matrix-driver-mock';
 import { Logger } from '../../logger/logger';
+import { LedMatrixFont } from './led-matrix-font';
 
 @Component.default
 export class LedMatrixService {
