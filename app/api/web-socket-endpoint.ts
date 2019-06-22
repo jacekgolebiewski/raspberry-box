@@ -6,6 +6,7 @@ import { WebSocketClient } from './web-socket-client';
 import { Application } from './application';
 import { ApplicationConfig } from '../shared/constants/config/application-config';
 import { ConfigKey } from '../shared/constants/config/config-key';
+import { application } from 'express';
 
 @Component.default
 export class WebSocketEndpoint {
@@ -13,6 +14,7 @@ export class WebSocketEndpoint {
     server: http.Server;
     app: express.Application;
     websocketServer: WebSocket.Server;
+    application: Application = new Application(undefined);
 
     constructor() {
         this.init();
@@ -27,8 +29,10 @@ export class WebSocketEndpoint {
             res.send('Raspberry box Application. Connect with WebSocket to use!');
         });
 
+        // init should be inside method
+        this.application.init();
         this.websocketServer.on('connection', (ws: WebSocket) => {
-            new Application(new WebSocketClient(ws));
+            this.application.webSocketClient = new WebSocketClient(ws);
         });
 
         const PORT = ApplicationConfig.get(ConfigKey.DEFAULT_PORT);

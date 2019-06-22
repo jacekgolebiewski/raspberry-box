@@ -28,13 +28,13 @@ export class Application {
     ]);
 
     constructor(public webSocketClient: WebSocketClient) {
-        this.init();
     }
 
-    private init() {
-        this.webSocketClient.onRequest = (request) => this.onRequest(request);
-        this.webSocketClient.init();
+    init() {
+        // this.webSocketClient.onRequest = (request) => this.onRequest(request);
+        // this.webSocketClient.init();
         this.pinToButton.forEach((value, key) => this.initButton(key));
+        this.gpioService.openOUT(20, 0);
     }
 
     initButton(pin: number): void {
@@ -42,9 +42,10 @@ export class Application {
         this.gpioService.openIN(pin);
         this.gpioService.poll(pin, (val) => {
             Logger.debug('Pressed button ' + pin);
-            this.onButtonStateChange(
-                this.pinToButton.get(pin),
-                val === 1 ? ButtonAction.PRESSED : ButtonAction.RELEASED)
+            this.gpioService.write(20, val);
+            // this.onButtonStateChange(
+            //     this.pinToButton.get(pin),
+            //     val === 1 ? ButtonAction.PRESSED : ButtonAction.RELEASED)
         });
     }
 

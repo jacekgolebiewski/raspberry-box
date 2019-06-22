@@ -16,13 +16,11 @@ export class WebSocketClient {
                 this.onRequest(JSON.parse(message))
             }
         });
-        this.onConnect()
+        this.onConnect();
     }
 
     private onConnect() {
-        this.sendText(null, 'Hello, I am Raspberry Box!');
-        setTimeout(() =>
-            this.sendText(null, 'Let\'s play'), 1000);
+        Logger.debug("Connected to client");
     }
 
     sendText(request, text) {
