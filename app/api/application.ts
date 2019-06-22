@@ -26,7 +26,7 @@ export class Application {
     ]);
 
     pinToButton: Map<number, Button> = new Map([
-        [16, Button.A],
+        [36, Button.A],
         // [21, Button.B]
     ]);
 
@@ -36,26 +36,16 @@ export class Application {
     }
 
     init() {
-        const rpio = this.gpioService.rpio;
-        rpio.init({
-            gpiomem: false, // required for: i²c, PWM, SPI
-                mapping: 'physical' // pin number = gpio number
-        });
-        this.initButton(36)
-        // this.pinToButton.forEach((value, key) => this.initButton(key));
+        this.pinToButton.forEach((value, key) => this.initButton(key));
     }
 
     initButton(pin: number): void {
         const _this = this;
-        const rpio = this.gpioService.rpio;
         Logger.debug('Initializing pin ' + pin);
-        rpio.open(pin, rpio.INPUT, rpio.PULL_DOWN);
-
-        let polling = new GpioPolling(pin);
-        this.pollings.push(polling);
-        polling.start((value) => {
-            Logger.debug('Pressed button ' + pin);
-        }, 200);
+        this.gpioService.openIN(pin);
+        this.gpioService.poll(pin, function (nVal) {
+            Logger.debug(`On poll: ${pin} = ${nVal}`);
+        });
 
         /*
             _this.onButtonStateChange.apply(_this,

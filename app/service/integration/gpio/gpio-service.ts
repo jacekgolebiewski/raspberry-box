@@ -18,7 +18,7 @@ export class GpioService {
     private GPIO_PWM_DEFAULT_FREQUENCY_DIVIDER = 64;
     private readonly OPTIONS: RPIO.Options = {
         gpiomem: false, // required for: i²c, PWM, SPI
-        mapping: 'gpio' // pin number = gpio number
+        mapping: 'physical' // pin number = gpio number
     };
 
     public rpio: Rpio = EnvironmentUtil.isProduction() ? require('rpio') : ComponentService.get(RpioMock);
@@ -27,7 +27,7 @@ export class GpioService {
 
     init() {
         Logger.debug(JSON.stringify(this.OPTIONS));
-        // this.rpio.init(this.OPTIONS);
+        this.rpio.init(this.OPTIONS);
         //this.rpio.pwmSetClockDivider(this.GPIO_PWM_DEFAULT_FREQUENCY_DIVIDER); //300kHz
     }
 
