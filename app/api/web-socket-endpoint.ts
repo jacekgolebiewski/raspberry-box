@@ -14,7 +14,7 @@ export class WebSocketEndpoint {
     server: http.Server;
     app: express.Application;
     websocketServer: WebSocket.Server;
-    application: Application = new Application();
+    application: Application;
 
     constructor() {
         this.init();
@@ -35,6 +35,7 @@ export class WebSocketEndpoint {
 
         const PORT = ApplicationConfig.get(ConfigKey.DEFAULT_PORT);
 
+        this.application = new Application();
         this.server.listen(PORT, function () {
             console.log(`Example app listening on port ${PORT}!`);
         });
