@@ -192,6 +192,8 @@ export class GpioService {
 
     onExit() {
         Logger.debug("GpioService.onExit invoked");
+        this.rpio.poll(16, undefined);
+        this.rpio.poll(21, undefined);
         this.closeAll();
     }
 
