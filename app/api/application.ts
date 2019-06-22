@@ -41,16 +41,16 @@ export class Application {
         const _this = this;
         Logger.debug('Initializing pin ' + pin);
         this.gpioService.openIN(pin);
-        this.gpioService.poll(pin, function(val) {
+        /*this.gpioService.poll(pin, function(val) {
             Logger.debug('Pressed button ' + pin);
             _this.onButtonStateChange.apply(_this,
                 [_this.pinToButton.get(pin),
                 val === 1 ? ButtonAction.PRESSED : ButtonAction.RELEASED]);
-        });
-        setTimeout(() => {
+        });*/
+        /*setTimeout(() => {
             Logger.debug('Disabling poll: ' + pin);
             this.gpioService.rpio.poll(pin, undefined);
-        }, 2000)
+        }, 2000)*/
     }
 
     onConnected(webSocketClient: WebSocketClient): any {
