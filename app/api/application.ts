@@ -36,19 +36,19 @@ export class Application {
     }
 
     init() {
-        this.pinToButton.forEach((value, key) => this.initButton(key));
+        this.initButton(27)
+        // this.pinToButton.forEach((value, key) => this.initButton(key));
     }
 
     initButton(pin: number): void {
         const _this = this;
         Logger.debug('Initializing pin ' + pin);
-        this.gpioService.openIN(pin);
+        rpio.open(pin, rpio.INPUT, rpio.PULL_DOWN);
 
-        let polling = new GpioPolling(16);
+        let polling = new GpioPolling(pin);
         this.pollings.push(polling);
         polling.start((value) => {
             Logger.debug('Pressed button ' + pin);
-
         }, 200);
 
         /*
