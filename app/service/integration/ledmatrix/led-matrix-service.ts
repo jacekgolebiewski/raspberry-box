@@ -52,6 +52,22 @@ export class LedMatrixService {
         await this.matrixDriver.letter(this.CONTROLLER_NUMBER, character[0]);
     }
 
+    async charFixed(character: string) {
+        const matrix = this.getCharMatrix(character);
+        this.custom(matrix);
+    }
+
+    getCharMatrix(character: string) {
+        const ascii = character.charCodeAt(0);
+        const char = LedMatrixFont[ascii];
+        return char.map(row => {
+            const bin = '0000000' + row.toString(2);
+            return bin
+                .split('')
+                .map(i => parseInt(i))
+        })
+    }
+
     async setBrightness(brightness: number) {
         await this.matrixDriver.setIntensity(this.CONTROLLER_NUMBER, brightness);
     }

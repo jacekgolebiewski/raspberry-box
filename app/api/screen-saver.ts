@@ -29,7 +29,7 @@ export class ScreenSaver {
             this.textIndex += 1;
         }
         this.ledMatrixService.setBrightness(this.brightness);
-        this.ledMatrixService.char(this.SCREEN_SAVER_TEXT[this.textIndex]);
+        this.ledMatrixService.charFixed(this.SCREEN_SAVER_TEXT[this.textIndex]);
     }
 
     disable() {
