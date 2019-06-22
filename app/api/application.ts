@@ -10,17 +10,15 @@ import { Button } from './model/button/button';
 import { ButtonAction } from './model/button/button-action';
 import { ConfigurationService } from '../service/configuration-service';
 import { PropertyRequest } from './model/property-request';
-import { SystemService } from '../service/system-service';
+import { GpioPolling } from './gpio-polling';
 
 export class Application {
 
     @Inject private ledMatrixService: LedMatrixService;
     @Inject private gpioService: GpioService;
     @Inject private configurationService: ConfigurationService;
-    @Inject private systemService: SystemService;
 
     public webSocketClient: WebSocketClient;
-    private interval;
 
     handlers: Map<string, ((Request) => void)> = new Map([
         [ScreenRequest.TYPE_NAME, (request) => this.onScreenRequest(request)],
@@ -28,32 +26,36 @@ export class Application {
     ]);
 
     pinToButton: Map<number, Button> = new Map([
-        [16, Button.A]
-        /*,
-        [21, Button.B]*/
+        [16, Button.A],
+        // [21, Button.B]
     ]);
+
+    pollings = [];
 
     constructor() {
     }
 
     init() {
-        const rpio = this.gpioService.rpio;
-        rpio.init({
-            gpiomem: false, // required for: i²c, PWM, SPI
-            mapping: 'gpio' // pin number = gpio number
-        });
+        this.pinToButton.forEach((value, key) => this.initButton(key));
+    }
 
-        this.systemService.onExit((done: Function) => {
-            Logger.info("onExit, closing pin 16");
-            rpio.poll(16, undefined);
-            rpio.close(16);
-            done.apply(this);
-        });
+    initButton(pin: number): void {
+        const _this = this;
+        Logger.debug('Initializing pin ' + pin);
+        this.gpioService.openIN(pin);
 
-        rpio.open(16, rpio.INPUT, rpio.PULL_DOWN);
-        rpio.poll(16, function (pin) {
+        let polling = new GpioPolling(16);
+        this.pollings.push(polling);
+        polling.start((value) => {
             Logger.debug('Pressed button ' + pin);
-        });
+
+        }, 200);
+
+        /*
+            _this.onButtonStateChange.apply(_this,
+                [_this.pinToButton.get(pin),
+                val === 1 ? ButtonAction.PRESSED : ButtonAction.RELEASED]);
+        * */
     }
 
     onConnected(webSocketClient: WebSocketClient): any {

@@ -27,7 +27,7 @@ export class GpioService {
 
     init() {
         Logger.debug(JSON.stringify(this.OPTIONS));
-        //this.rpio.init(this.OPTIONS);
+        this.rpio.init(this.OPTIONS);
         //this.rpio.pwmSetClockDivider(this.GPIO_PWM_DEFAULT_FREQUENCY_DIVIDER); //300kHz
     }
 
@@ -96,6 +96,9 @@ export class GpioService {
         gpio.value = value;
     }
 
+    /**
+     * TO FIX
+     */
     poll(id: number, cb: (nVal) => any) {
         //this.clearPoll(id); //TODO jg: should consider checking if pin is polling
         const _this = this;
@@ -192,8 +195,6 @@ export class GpioService {
 
     onExit() {
         Logger.debug("GpioService.onExit invoked");
-        this.rpio.poll(16, undefined);
-        this.rpio.poll(21, undefined);
         this.closeAll();
     }
 
