@@ -14,7 +14,7 @@ export class GpioPolling {
 
     start(onChangeCallback: (number) => void, rateInMs: number) {
         this.interval = setInterval(() => {
-            let val = this.gpioService.read(this.pin);
+            let val = this.gpioService.rpio.read(this.pin);
             if (this.value !== val) {
                 this.value = val;
                 onChangeCallback && onChangeCallback(this.value);
