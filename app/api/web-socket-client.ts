@@ -1,29 +1,31 @@
 import * as WebSocket from 'ws';
 import { Request } from './model/request';
 import { Logger } from '../service/logger/logger';
+import { Inject } from 'typescript-ioc';
+import { LockService } from '../service/lock/lock-service';
 
 export class WebSocketClient {
 
+    private readonly LOCK_ID = "WebSocketClient";
+
+    @Inject private lockService: LockService;
+
     onRequest: (request: Request) => void;
     onDisconnect: () => void;
-
-    isWorking = false;
 
     constructor(public webSocket: WebSocket) {
     }
 
     public start() {
         this.webSocket.on('message', (message: string) => {
-            if(this.isWorking) {
-                Logger.warn("Tried simultaneous access to 'message' endpoint, rejected!");
-                return;
+            Logger.trace(`received message: ${message}`);
+            if(!this.lockService.acquire(this.LOCK_ID, "Tried simultaneous access to 'message' endpoint, rejected!")) {
+                return
             }
-            this.isWorking = true;
-            Logger.trace(`received: ${message}`);
             if (this.onRequest !== undefined) {
                 this.onRequest(JSON.parse(message))
             }
-            this.isWorking = false
+            this.lockService.release(this.LOCK_ID);
         });
         this.webSocket.on('close', () => {
             this.onDisconnect && this.onDisconnect();

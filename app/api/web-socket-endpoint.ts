@@ -19,19 +19,17 @@ export class WebSocketEndpoint {
     app: express.Application;
     websocketServer: WebSocket.Server;
 
-
-
     init() {
         this.app = express();
         this.server = http.createServer(this.app);
         this.websocketServer = new WebSocket.Server({server: this.server});
 
         this.app.get('/', function (req, res) {
-            res.send('Raspberry box Application. Connect with WebSocket to use!');
+            res.send('RaspberryBox Application. Connect with WebSocket to use!');
         });
 
         this.websocketServer.on('connection', (ws: WebSocket) => {
-            Logger.info("Connected new client");
+            Logger.info("WebSocketEndpoint: Connected new client");
             const webSocketClient = new WebSocketClient(ws);
             this.application.onConnected(webSocketClient);
             webSocketClient.start();

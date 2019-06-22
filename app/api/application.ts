@@ -10,7 +10,6 @@ import { Button } from './model/button/button';
 import { ButtonAction } from './model/button/button-action';
 import { ConfigurationService } from '../service/configuration-service';
 import { PropertyRequest } from './model/property-request';
-import { GpioPolling } from './gpio-polling';
 
 export class Application {
 
@@ -27,15 +26,11 @@ export class Application {
 
     pinToButton: Map<number, Button> = new Map([
         [36, Button.A],
-        // [21, Button.B]
+        [38, Button.B]
     ]);
 
-    pollings = [];
-
-    constructor() {
-    }
-
     init() {
+        this.ledMatrixService.char("C");
         this.pinToButton.forEach((value, key) => this.initButton(key));
     }
 
@@ -45,29 +40,24 @@ export class Application {
         this.gpioService.openIN(pin);
         this.gpioService.poll(pin, function (nVal) {
             Logger.debug(`On poll: ${pin} = ${nVal}`);
-        });
-
-        /*
             _this.onButtonStateChange.apply(_this,
                 [_this.pinToButton.get(pin),
-                val === 1 ? ButtonAction.PRESSED : ButtonAction.RELEASED]);
-        * */
+                    nVal === 1 ? ButtonAction.PRESSED : ButtonAction.RELEASED]);
+        });
     }
 
     onConnected(webSocketClient: WebSocketClient): any {
         this.webSocketClient = webSocketClient;
         this.webSocketClient.onRequest = (request) => this.onRequest(request);
         this.webSocketClient.onDisconnect = () => {
-            /*if (this.interval) {
-                clearInterval(this.interval)
-            }*/
+            Logger.debug("Client disconnected")
+            //should clear screen
         };
     }
 
     private onButtonStateChange(button: Button, action: ButtonAction) {
         this.webSocketClient.sendMessage(undefined, new ButtonResponse(button, action));
     }
-
 
     onRequest(request: Request): void {
         Logger.debug(`onRequest:request.type = ${request.type}`);
@@ -80,7 +70,7 @@ export class Application {
     }
 
     onScreenRequest(request: ScreenRequest): void {
-        Logger.info(`onScreenRequest(...)`);
+        Logger.trace(`onScreenRequest(...)`);
         this.ledMatrixService.custom(request.matrix);
     }
 

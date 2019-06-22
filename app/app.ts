@@ -24,7 +24,11 @@ export class App {
     }
 
     private configureGpioService() {
-        //this.gpioService.init();
+        this.gpioService.init();
+        this.systemService.onExit((done: Function) => {
+            this.gpioService.onExit();
+            done.apply(this);
+        });
     }
 
     private startApplication() {

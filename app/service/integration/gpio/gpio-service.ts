@@ -12,23 +12,19 @@ import { TimeUtil } from '../../../shared/utils/time-util';
 @Component.default
 export class GpioService {
 
-    readonly ALL_GPIO = [3, 4, 5, 6, 12, 13, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 36];
+    readonly AVAILABLE_GPIO = [36, 38];
 
-    private GPIO_PWM_RANGE = 1000;
-    private GPIO_PWM_DEFAULT_FREQUENCY_DIVIDER = 64;
     private readonly OPTIONS: RPIO.Options = {
         gpiomem: false, // required for: i²c, PWM, SPI
-        mapping: 'physical' // pin number = gpio number
+        mapping: 'physical' // pin number = physical pinout number
     };
 
     public rpio: Rpio = EnvironmentUtil.isProduction() ? require('rpio') : ComponentService.get(RpioMock);
-
     gpios: Array<Gpio> = [];
 
     init() {
         Logger.debug(JSON.stringify(this.OPTIONS));
         this.rpio.init(this.OPTIONS);
-        //this.rpio.pwmSetClockDivider(this.GPIO_PWM_DEFAULT_FREQUENCY_DIVIDER); //300kHz
     }
 
     getOrUndefined(id: number, type?: GpioType): Gpio {
@@ -65,14 +61,8 @@ export class GpioService {
         this.add(id, GpioType.OUT, defaultState);
     }
 
-    openPWM(id: number) {
-        this.rpio.open(id, this.rpio.PWM);
-        this.rpio.pwmSetRange(id, this.GPIO_PWM_RANGE);
-        this.add(id, GpioType.PWM);
-    }
-
     private validateGpioId(id: number): void {
-        if (this.ALL_GPIO.indexOf(id) < 0) {
+        if (this.AVAILABLE_GPIO.indexOf(id) < 0) {
             throw new GpioError(new Gpio(id, GpioType.IN), `Invalid gpio id: ${id}`);
         }
     }
@@ -96,16 +86,11 @@ export class GpioService {
         gpio.value = value;
     }
 
-    /**
-     * TO FIX
-     */
     poll(id: number, cb: (nVal) => any) {
-        //this.clearPoll(id); //TODO jg: should consider checking if pin is polling
         const _this = this;
         this.rpio.poll(id, function(pin: number) {
-            Logger.debug('Original poll of ' + pin);
             const val = _this.read(pin);
-            Logger.debug('Poll read val: ' + val);
+            Logger.trace(`GpioService: polled pin ${pin} with value ${val}`);
             cb && cb(val);
         });
     }
@@ -113,35 +98,6 @@ export class GpioService {
     clearPoll(id: number) {
         this.get(id, GpioType.IN);
         this.rpio.poll(id, undefined);
-    }
-
-    /**
-     * @deprecated Since 2.0, use Pca9685 instead
-     */
-    writePWM(id: number, pwmValue: number, pwmRange: number) {
-        let val = this.GPIO_PWM_RANGE * (pwmRange / 100) * (pwmValue / 100);
-        this.rpio.pwmSetData(id, val);
-    }
-
-    /**
-     * @deprecated Since 2.0, use Pca9685 instead
-     */
-    private writeSoftPwm(gpio: Gpio) {
-        //: SoftPwm = gpio.softPwm;
-        const softPwmValue = {
-            repeat: 0,
-            dutyCycle: 0,
-            period: 0
-        };
-        let times = [];
-        for (let i = 0; i < softPwmValue.repeat; i++) {
-            this.rpio.write(gpio.id, this.rpio.HIGH);
-            times.push(TimeUtil.waitMillis(softPwmValue.dutyCycle));
-            this.rpio.write(gpio.id, this.rpio.LOW);
-            times.push(TimeUtil.waitMillis(softPwmValue.period - softPwmValue.dutyCycle));
-        }
-
-        Logger.trace(`Times array: ${times}`);
     }
 
     close(id: number) {
@@ -171,26 +127,6 @@ export class GpioService {
     private pushGpio(gpio: Gpio) {
         this.gpios.push(gpio);
         this.gpios = _.sortBy(this.gpios, 'id');
-    }
-
-    /**
-     * @deprecated Since 2.0, use Pca9685 instead
-     * ustawia częstotlisc pwm, a wlasciwie dzielnik czestotliwosci
-     *
-     * z dokumentacji:
-     *
-     * Set the PWM refresh rate with pwmSetClockDivider(). This is a power-of-two divisor of the base 19.2MHz rate, with a maximum value of 4096 (4.6875kHz).
-     *
-     *  rpio.pwmSetClockDivider(64); //Set PWM refresh rate to 300kHz
-     * Set the PWM range for a pin with pwmSetRange(). This determines the maximum pulse width.
-     *
-     * rpio.pwmSetRange(12, 1024);
-     * Finally, set the PWM width for a pin with pwmSetData().
-     *
-     * rpio.pwmSetData(12, 512);
-     */
-    updatePwmFrequency(value: number) {
-        this.rpio.pwmSetClockDivider(value);
     }
 
     onExit() {
