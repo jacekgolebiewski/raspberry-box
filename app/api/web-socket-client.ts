@@ -6,15 +6,23 @@ export class WebSocketClient {
 
     onRequest: (request: Request) => void;
 
+    isWorking = false;
+
     constructor(public webSocket: WebSocket) {
     }
 
     public init() {
         this.webSocket.on('message', (message: string) => {
+            if(this.isWorking) {
+                Logger.warn("Tried simultaneous access to 'message' endpoint, rejected!");
+                return;
+            }
+            this.isWorking = true;
             Logger.trace(`received: ${message}`);
             if (this.onRequest !== undefined) {
                 this.onRequest(JSON.parse(message))
             }
+            this.isWorking = false
         });
         this.onConnect();
     }
