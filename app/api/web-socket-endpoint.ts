@@ -7,18 +7,19 @@ import { Application } from './application';
 import { ApplicationConfig } from '../shared/constants/config/application-config';
 import { ConfigKey } from '../shared/constants/config/config-key';
 import { application } from 'express';
+import { Logger } from '../service/logger/logger';
+import { Inject } from 'typescript-ioc';
 
 @Component.default
 export class WebSocketEndpoint {
 
+    @Inject private application: Application;
+
     server: http.Server;
     app: express.Application;
     websocketServer: WebSocket.Server;
-    application: Application;
 
-    constructor() {
-        this.init();
-    }
+
 
     init() {
         this.app = express();
@@ -30,14 +31,16 @@ export class WebSocketEndpoint {
         });
 
         this.websocketServer.on('connection', (ws: WebSocket) => {
-            this.application.onConnected(new WebSocketClient(ws));
+            Logger.info("Connected new client");
+            const webSocketClient = new WebSocketClient(ws);
+            this.application.onConnected(webSocketClient);
+            webSocketClient.start();
         });
 
         const PORT = ApplicationConfig.get(ConfigKey.DEFAULT_PORT);
 
-        this.application = new Application();
         this.server.listen(PORT, function () {
-            console.log(`Example app listening on port ${PORT}!`);
+            console.log(`Raspberry box listening on port ${PORT}!`);
         });
     }
 

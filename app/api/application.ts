@@ -30,27 +30,11 @@ export class Application {
         [21, Button.B]
     ]);
 
-    actionQ: Array<ButtonResponse> = [];
-
     constructor() {
-        this.init()
     }
 
     init() {
         this.pinToButton.forEach((value, key) => this.initButton(key));
-        // this.gpioService.openOUT(20, 0);
-    }
-
-    onConnected(webSocketClient: WebSocketClient): any {
-        this.webSocketClient = webSocketClient;
-        this.webSocketClient.onRequest = (request) => this.onRequest(request);
-        this.webSocketClient.onDisconnect = () => {
-            if (this.interval) {
-                clearInterval(this.interval)
-            }
-        };
-        this.webSocketClient.init();
-        this.initActionListener();
     }
 
     initButton(pin: number): void {
@@ -65,21 +49,20 @@ export class Application {
         });
     }
 
-    private onButtonStateChange(button: Button, action: ButtonAction) {
-        this.actionQ.push(new ButtonResponse(button, action));
+    onConnected(webSocketClient: WebSocketClient): any {
+        this.webSocketClient = webSocketClient;
+        this.webSocketClient.onRequest = (request) => this.onRequest(request);
+        this.webSocketClient.onDisconnect = () => {
+            /*if (this.interval) {
+                clearInterval(this.interval)
+            }*/
+        };
     }
 
-    private initActionListener() {
-        setTimeout(() => {
-            this.interval = setInterval(() => {
-                const events = this.actionQ;
-                this.actionQ = [];
-                this.actionQ.forEach((response) => {
-                    this.webSocketClient.sendMessage(undefined, response);
-                })
-            }, 100);
-        }, 1000);
+    private onButtonStateChange(button: Button, action: ButtonAction) {
+        this.webSocketClient.sendMessage(undefined, new ButtonResponse(button, action));
     }
+
 
     onRequest(request: Request): void {
         Logger.debug(`onRequest:request.type = ${request.type}`);

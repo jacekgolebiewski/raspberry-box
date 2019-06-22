@@ -12,7 +12,7 @@ export class WebSocketClient {
     constructor(public webSocket: WebSocket) {
     }
 
-    public init() {
+    public start() {
         this.webSocket.on('message', (message: string) => {
             if(this.isWorking) {
                 Logger.warn("Tried simultaneous access to 'message' endpoint, rejected!");
