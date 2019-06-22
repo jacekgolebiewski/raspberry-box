@@ -14,10 +14,12 @@ export class LedMatrixService {
     isWorking = false;
 
     constructor() {
+        return;
         this.init();
     }
 
     init() {
+        return;
         let options = new LedMatrixOptions();
         if (EnvironmentUtil.isProduction()) {
             let Max7219 = require('max7219-display');
@@ -28,6 +30,7 @@ export class LedMatrixService {
     }
 
     async custom(matrix: Array<Array<number>>) {
+        return;
         if(this.isWorking) {
             Logger.warn("Tried simultaneous access to screen, rejected!");
             return;
@@ -39,6 +42,7 @@ export class LedMatrixService {
     }
 
     async char(character: string) {
+        return;
         if (character.length != 1) {
             Logger.error("character param must have only 1 letter");
             return
