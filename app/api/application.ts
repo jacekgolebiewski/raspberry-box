@@ -17,6 +17,8 @@ export class Application {
     @Inject private gpioService: GpioService;
     @Inject private configurationService: ConfigurationService;
 
+    public webSocketClient: WebSocketClient;
+
     handlers: Map<string, ((Request) => void)> = new Map([
         [ScreenRequest.TYPE_NAME, (request) => this.onScreenRequest(request)],
         [PropertyRequest.TYPE_NAME, (request) => this.onPropertyRequest(request)]
@@ -27,14 +29,19 @@ export class Application {
         [21, Button.B]
     ]);
 
-    constructor(public webSocketClient: WebSocketClient) {
+    constructor() {
+        this.init()
     }
 
     init() {
-        // this.webSocketClient.onRequest = (request) => this.onRequest(request);
-        // this.webSocketClient.init();
         this.pinToButton.forEach((value, key) => this.initButton(key));
         this.gpioService.openOUT(20, 0);
+    }
+
+    onConnected(webSocketClient: WebSocketClient): any {
+        this.webSocketClient = webSocketClient;
+        this.webSocketClient.onRequest = (request) => this.onRequest(request);
+        this.webSocketClient.init();
     }
 
     initButton(pin: number): void {
@@ -43,14 +50,16 @@ export class Application {
         this.gpioService.poll(pin, (val) => {
             Logger.debug('Pressed button ' + pin);
             this.gpioService.write(20, val);
-            // this.onButtonStateChange(
-            //     this.pinToButton.get(pin),
-            //     val === 1 ? ButtonAction.PRESSED : ButtonAction.RELEASED)
+            this.onButtonStateChange(
+                this.pinToButton.get(pin),
+                val === 1 ? ButtonAction.PRESSED : ButtonAction.RELEASED)
         });
     }
 
     private onButtonStateChange(button: Button, action: ButtonAction) {
-        this.webSocketClient.sendMessage(undefined, new ButtonResponse(button, action))
+        if(this.webSocketClient !== undefined) {
+           this.webSocketClient.sendMessage(undefined, new ButtonResponse(button, action))
+        }
     }
 
     onRequest(request: Request): void {
