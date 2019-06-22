@@ -47,5 +47,9 @@ export class LedMatrixService {
         await this.matrixDriver.letter(this.CONTROLLER_NUMBER, character[0]);
     }
 
+    async setBrightness(brightness: number) {
+        await this.matrixDriver.setIntensity(this.CONTROLLER_NUMBER, brightness);
+    }
+
 
 }

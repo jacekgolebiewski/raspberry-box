@@ -10,12 +10,14 @@ import { Button } from './model/button/button';
 import { ButtonAction } from './model/button/button-action';
 import { ConfigurationService } from '../service/configuration-service';
 import { PropertyRequest } from './model/property-request';
+import { ScreenSaver } from './screen-saver';
 
 export class Application {
 
     @Inject private ledMatrixService: LedMatrixService;
     @Inject private gpioService: GpioService;
     @Inject private configurationService: ConfigurationService;
+    @Inject private screenSaver: ScreenSaver;
 
     public webSocketClient: WebSocketClient;
 
@@ -29,8 +31,9 @@ export class Application {
         [38, Button.B]
     ]);
 
+
     init() {
-        this.ledMatrixService.char("C");
+        this.screenSaver.enable();
         this.pinToButton.forEach((value, key) => this.initButton(key));
     }
 
@@ -47,11 +50,12 @@ export class Application {
     }
 
     onConnected(webSocketClient: WebSocketClient): any {
+        this.screenSaver.disable();
         this.webSocketClient = webSocketClient;
         this.webSocketClient.onRequest = (request) => this.onRequest(request);
         this.webSocketClient.onDisconnect = () => {
             Logger.debug("Client disconnected")
-            //should clear screen
+            this.screenSaver.enable();
         };
     }
 
