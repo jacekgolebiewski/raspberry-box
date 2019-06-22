@@ -5,6 +5,7 @@ import { Logger } from '../service/logger/logger';
 export class WebSocketClient {
 
     onRequest: (request: Request) => void;
+    onDisconnect: () => void;
 
     isWorking = false;
 
@@ -23,6 +24,9 @@ export class WebSocketClient {
                 this.onRequest(JSON.parse(message))
             }
             this.isWorking = false
+        });
+        this.webSocket.on('close', () => {
+            this.onDisconnect && this.onDisconnect();
         });
         this.onConnect();
     }

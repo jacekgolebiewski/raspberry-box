@@ -18,6 +18,7 @@ export class Application {
     @Inject private configurationService: ConfigurationService;
 
     public webSocketClient: WebSocketClient;
+    private interval;
 
     handlers: Map<string, ((Request) => void)> = new Map([
         [ScreenRequest.TYPE_NAME, (request) => this.onScreenRequest(request)],
@@ -29,38 +30,55 @@ export class Application {
         [21, Button.B]
     ]);
 
+    actionQ: Array<ButtonResponse> = [];
+
     constructor() {
         this.init()
     }
 
     init() {
         this.pinToButton.forEach((value, key) => this.initButton(key));
-        this.gpioService.openOUT(20, 0);
+        // this.gpioService.openOUT(20, 0);
     }
 
     onConnected(webSocketClient: WebSocketClient): any {
         this.webSocketClient = webSocketClient;
         this.webSocketClient.onRequest = (request) => this.onRequest(request);
+        this.webSocketClient.onDisconnect = () => {
+            if (this.interval) {
+                clearInterval(this.interval)
+            }
+        };
         this.webSocketClient.init();
+        this.initActionListener();
     }
 
     initButton(pin: number): void {
+        const _this = this;
         Logger.debug('Initializing pin ' + pin);
-        /*this.gpioService.openIN(pin);
-        this.gpioService.rpio.msleep(500);
-        this.gpioService.poll(pin, (val) => {
+        this.gpioService.openIN(pin);
+        this.gpioService.poll(pin, function(val) {
             Logger.debug('Pressed button ' + pin);
-            this.gpioService.write(20, val);
-            this.onButtonStateChange(
-                this.pinToButton.get(pin),
+            _this.onButtonStateChange(
+                _this.pinToButton.get(pin),
                 val === 1 ? ButtonAction.PRESSED : ButtonAction.RELEASED)
-        });*/
+        });
     }
 
     private onButtonStateChange(button: Button, action: ButtonAction) {
-        if(this.webSocketClient !== undefined) {
-           this.webSocketClient.sendMessage(undefined, new ButtonResponse(button, action))
-        }
+        this.actionQ.push(new ButtonResponse(button, action));
+    }
+
+    private initActionListener() {
+        setTimeout(() => {
+            this.interval = setInterval(() => {
+                const events = this.actionQ;
+                this.actionQ = [];
+                this.actionQ.forEach((response) => {
+                    this.webSocketClient.sendMessage(undefined, response);
+                })
+            }, 100);
+        }, 1000);
     }
 
     onRequest(request: Request): void {
