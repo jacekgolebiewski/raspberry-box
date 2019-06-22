@@ -49,7 +49,7 @@ export class Application {
         });
         setTimeout(() => {
             Logger.debug('Disabling poll: ' + pin);
-            this.gpioService.poll(pin, undefined);
+            this.gpioService.rpio.poll(pin, undefined);
         }, 2000)
     }
 
