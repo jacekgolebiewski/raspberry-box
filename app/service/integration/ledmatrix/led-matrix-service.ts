@@ -61,8 +61,9 @@ export class LedMatrixService {
         const ascii = character.charCodeAt(0);
         const char = LedMatrixFont[ascii];
         return char.map(row => {
-            const bin = '0000000' + row.toString(2);
+            const bin: String = row.toString(2);
             return bin
+                ['padStart'](8, '0')
                 .split('')
                 .map(i => parseInt(i))
         })
