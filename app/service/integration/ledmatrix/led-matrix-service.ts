@@ -33,7 +33,7 @@ export class LedMatrixService {
     }
 
     async custom(matrix: Array<Array<number>>) {
-        if(this.isWorking) {
+        if (this.isWorking) {
             Logger.warn("Tried simultaneous access to screen, rejected!");
             return;
         }
@@ -59,19 +59,28 @@ export class LedMatrixService {
 
     getCharMatrix(character: string) {
         const ascii = character.charCodeAt(0);
-        const char = LedMatrixFont[ascii];
-        return char.map(row => {
+        const char = LedMatrixFont.SINCLAIR_FONT[ascii];
+        return this.rotate(char.map(row => {
             const bin: String = row.toString(2);
             return bin
                 ['padStart'](8, '0')
                 .split('')
                 .map(i => parseInt(i))
-        })
+        }));
     }
 
     async setBrightness(brightness: number) {
         await this.matrixDriver.setIntensity(this.CONTROLLER_NUMBER, brightness);
     }
 
+    private rotate(matrix) {
+        const N = matrix.length - 1;
+        const result = matrix.map((row, i) =>
+            row.map((val, j) => matrix[N - j][i])
+        );
+        matrix.length = 0;
+        matrix.push(...result);
+        return matrix;
+    }
 
 }
