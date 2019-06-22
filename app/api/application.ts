@@ -50,7 +50,7 @@ export class Application {
         setTimeout(() => {
             Logger.debug('Disabling poll: ' + pin);
             this.gpioService.poll(pin, undefined);
-        }, 1000)
+        }, 2000)
     }
 
     onConnected(webSocketClient: WebSocketClient): any {
