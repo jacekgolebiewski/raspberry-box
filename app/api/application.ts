@@ -1,25 +1,25 @@
 import { WebSocketClient } from './web-socket-client';
 import { Request } from './model/request';
-import { LedRequest } from './model/led/led-request';
 import { Logger } from '../service/logger/logger';
 import { Inject } from 'typescript-ioc';
 import { LedMatrixService } from '../service/integration/ledmatrix/led-matrix-service';
-import { LedColor } from './model/led/led-color';
-import { LedState } from './model/led/led-state';
 import { ScreenRequest } from './model/screen/screen-request';
 import { GpioService } from '../service/integration/gpio/gpio-service';
 import { ButtonResponse } from './model/button/button-response';
 import { Button } from './model/button/button';
 import { ButtonAction } from './model/button/button-action';
+import { ConfigurationService } from '../service/configuration-service';
+import { PropertyRequest } from './model/property-request';
 
 export class Application {
 
     @Inject private ledMatrixService: LedMatrixService;
     @Inject private gpioService: GpioService;
+    @Inject private configurationService: ConfigurationService;
 
-    handlers: Map<string, ((Request ) => void)> = new Map([
-        [LedRequest.TYPE_NAME, (request) => this.onLedRequest(request)],
-        [ScreenRequest.TYPE_NAME, (request) => this.onScreenRequest(request)]
+    handlers: Map<string, ((Request) => void)> = new Map([
+        [ScreenRequest.TYPE_NAME, (request) => this.onScreenRequest(request)],
+        [PropertyRequest.TYPE_NAME, (request) => this.onPropertyRequest(request)]
     ]);
 
     pinToButton: Map<number, Button> = new Map([
@@ -61,20 +61,17 @@ export class Application {
         }
     }
 
-    onLedRequest(request: LedRequest): void {
-        Logger.info(`onLedRequest: ${JSON.stringify(request)}`);
-        if (request.color === LedColor.RED) {
-            if (request.state === LedState.ON) {
-                // ...
-            } else {
-                // ...
-            }
-        }
-
-    }
-
     onScreenRequest(request: ScreenRequest): void {
         Logger.info(`onScreenRequest(...)`);
         this.ledMatrixService.custom(request.matrix);
+    }
+
+    private onPropertyRequest(request: PropertyRequest) {
+        if (request.key === "test_delay") {
+            setTimeout(() => {
+                this.webSocketClient.sendText(request, `${request.value}ms delayed test response`);
+            }, +request.value);
+        }
+        this.configurationService.setProperty(request.key, request.value);
     }
 }
