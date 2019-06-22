@@ -10,12 +10,14 @@ import { Button } from './model/button/button';
 import { ButtonAction } from './model/button/button-action';
 import { ConfigurationService } from '../service/configuration-service';
 import { PropertyRequest } from './model/property-request';
+import { SystemService } from '../service/system-service';
 
 export class Application {
 
     @Inject private ledMatrixService: LedMatrixService;
     @Inject private gpioService: GpioService;
     @Inject private configurationService: ConfigurationService;
+    @Inject private systemService: SystemService;
 
     public webSocketClient: WebSocketClient;
     private interval;
@@ -26,31 +28,31 @@ export class Application {
     ]);
 
     pinToButton: Map<number, Button> = new Map([
-        [16, Button.A],
-        [21, Button.B]
+        [16, Button.A]
+        /*,
+        [21, Button.B]*/
     ]);
 
     constructor() {
     }
 
     init() {
-        this.pinToButton.forEach((value, key) => this.initButton(key));
-    }
-
-    initButton(pin: number): void {
-        const _this = this;
-        Logger.debug('Initializing pin ' + pin);
-        this.gpioService.openIN(pin);
-        this.gpioService.poll(pin, function(val) {
-            Logger.debug('Pressed button ' + pin);
-            /*_this.onButtonStateChange.apply(_this,
-                [_this.pinToButton.get(pin),
-                val === 1 ? ButtonAction.PRESSED : ButtonAction.RELEASED]);*/
+        const rpio = this.gpioService.rpio;
+        rpio.init({
+            gpiomem: false, // required for: i²c, PWM, SPI
+            mapping: 'gpio' // pin number = gpio number
         });
-        /*setTimeout(() => {
-            Logger.debug('Disabling poll: ' + pin);
-            this.gpioService.rpio.poll(pin, undefined);
-        }, 2000)*/
+
+        this.systemService.onExit((done: Function) => {
+            rpio.poll(16, undefined);
+            rpio.close(16)
+            done.apply(this);
+        });
+
+        rpio.open(16, rpio.INPUT, rpio.PULL_DOWN);
+        rpio.poll(16, function (pin) {
+            Logger.debug('Pressed button ' + pin);
+        });
     }
 
     onConnected(webSocketClient: WebSocketClient): any {
