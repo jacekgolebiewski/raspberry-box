@@ -7,7 +7,6 @@ import { ComponentService } from '../../../component/component-service';
 import { Component } from '../../../component/component';
 import { GpioError } from './GpioError';
 import * as _ from 'lodash';
-import { TimeUtil } from '../../../shared/utils/time-util';
 
 @Component.default
 export class GpioService {
@@ -15,7 +14,7 @@ export class GpioService {
     readonly AVAILABLE_GPIO = [36, 38];
 
     private readonly OPTIONS: RPIO.Options = {
-        gpiomem: false, // required for: i²c, PWM, SPI
+        gpiomem: true,
         mapping: 'physical' // pin number = physical pinout number
     };
 
