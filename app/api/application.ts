@@ -13,9 +13,12 @@ import { PropertyRequest } from './model/property-request';
 import { ScreenSaver } from './screen-saver';
 import { StringUtil } from '../shared/utils/string-util';
 import { Component } from '../component/component';
+import { RandomUtil } from '../shared/utils/random-util';
 
 @Component.default
 export class Application {
+
+    uid = RandomUtil.getRandom(100);
 
     @Inject private ledMatrixService: LedMatrixService;
     @Inject private gpioService: GpioService;
@@ -48,7 +51,6 @@ export class Application {
         const _this = this;
         this.gpio.on('change', (channel, value) => {
             Logger.trace('Channel ' + channel + ' value is now ' + value);
-            Logger.trace(StringUtil.stringify(_this.webSocketClient));
             _this.onGpioChange(channel, value);
         });
     }
@@ -60,9 +62,8 @@ export class Application {
     }
 
     onConnected(webSocketClient: WebSocketClient): any {
+        Logger.debug(`onConnected for application ${this.uid}`);
         this.screenSaver.disable();
-        Logger.trace(`Setting from webSocketClient: ${StringUtil.stringify(webSocketClient)}`);
-        Logger.trace(`Setting to webSocketClient: ${StringUtil.stringify(this.webSocketClient)}`);
         this.webSocketClient = webSocketClient;
         this.webSocketClient.onRequest = (request) => this.onRequest(request);
         this.webSocketClient.onDisconnect = () => {
@@ -72,8 +73,8 @@ export class Application {
     }
 
     private onButtonStateChange(button: Button, action: ButtonAction) {
+        Logger.debug(`onButtonStateChange for application ${this.uid}`);
         Logger.trace(`Changed state of button ${button} to ${action}`);
-        Logger.trace(StringUtil.stringify(this.webSocketClient));
         if (this.webSocketClient !== undefined) {
             Logger.trace(`webSocketClient available`);
             this.webSocketClient.sendMessage(undefined, new ButtonResponse(button, action));
