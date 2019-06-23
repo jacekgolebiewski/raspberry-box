@@ -28,7 +28,7 @@ export class ApplicationConfig {
         }
         if(EnvironmentUtil.currentEnvironment === Environment.RPI) {
             ApplicationConfig.props[ConfigKey.WEBAPP_URL] = this.RASPBERRY_WEBAPP_URL;
-            ApplicationConfig.props[ConfigKey.LOG_LEVEL] = LogLevel.DEBUG;
+            ApplicationConfig.props[ConfigKey.LOG_LEVEL] = LogLevel.TRACE;
         }
     }
 
