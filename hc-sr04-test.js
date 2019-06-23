@@ -9,6 +9,7 @@ gpio.setup(ECHO, gpio.DIR_IN, gpio.EDGE_BOTH);
 async function readPin(pin) {
     return new Promise((resolve, reject) => {
         gpio.read(pin, function(err, value) {
+            console.log('Read pin '+value);
             if (err) throw err;
             resolve(pin);
         });
@@ -18,10 +19,14 @@ async function readPin(pin) {
 async function checkDistance() {
     console.log('checkDistance()');
     gpio.write(TRIG, true);
+    for(let i = 0; i< 10; i++) {
+        console.log('Waiting...');
+    }
     gpio.write(TRIG, false);
     console.log('triggered');
 
     while (true) {
+        console.log('while cycle');
         let value = await readPin(ECHO);
         if (value === true) {
             break;
@@ -62,7 +67,7 @@ async function checkDistance() {
 
 
 
-setInterval(() => {
+setTimeout(() => {
     console.log('Checking distance...');
     checkDistance();
 }, 1000);
