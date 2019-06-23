@@ -58,6 +58,8 @@ async function checkDistance() {
 
         console.log(`${startDate.getTime()} / ${endDate.getTime()}`);*/
 }
+
+checkDistance();
 /*
     gpio.on('change', (channel, value) => {
 
