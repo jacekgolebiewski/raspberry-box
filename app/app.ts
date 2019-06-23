@@ -1,13 +1,3 @@
-import { GpioService } from "./service/integration/gpio/gpio-service";
-import { AppBanner } from "./shared/misc/app-banner";
-import { ComponentService } from "./component/component-service";
-import { Inject } from 'typescript-ioc';
-import { Logger } from './service/logger/logger';
-import { EnvironmentUtil } from './shared/utils/environment-util';
-import { SystemService } from './service/system-service';
-import { WebSocketEndpoint } from './api/web-socket-endpoint';
-import { Application } from './api/application';
-
 export class App {
 /*
 
