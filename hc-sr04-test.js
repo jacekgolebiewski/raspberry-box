@@ -1,9 +1,11 @@
 const gpio = require('rpi-gpio');
 const ECHO = 36;
 const TRIG = 37;
+const BUTTON = 38;
 
 gpio.setup(TRIG, gpio.DIR_OUT);
 gpio.setup(ECHO, gpio.DIR_IN, gpio.EDGE_BOTH);
+gpio.setup(BUTTON, gpio.DIR_IN, gpio.EDGE_BOTH);
 
 
 async function readPin(pin) {
@@ -17,8 +19,14 @@ async function readPin(pin) {
 
 async function checkDistance() {
     gpio.on('change', (channel, value) => {
-        console.log(`Poll ${channel} val: ${value}`);
+        if(channel === BUTTON) {
+            console.log(`TRIG`);
+            gpio.write(TRIG, value);
+        } else {
+            console.log(`Poll ${channel} val: ${value}`);
+        }
     });
+/*
 
     console.log('checkDistance()');
     gpio.write(TRIG, true);
@@ -27,6 +35,7 @@ async function checkDistance() {
     }
     gpio.write(TRIG, false);
     console.log('triggered');
+*/
 
     while (true) {
         let value = await readPin(ECHO);
@@ -34,7 +43,7 @@ async function checkDistance() {
             break;
         }
     }
-    let startDate = new Date();
+/*    let startDate = new Date();
     console.log('found 1 on ECHO pin');
 
     while (true) {
@@ -46,7 +55,7 @@ async function checkDistance() {
     let endDate = new Date();
     console.log('found 0 on ECHO pin');
 
-    console.log(`${startDate.getTime()} / ${endDate.getTime()}`);
+    console.log(`${startDate.getTime()} / ${endDate.getTime()}`);*/
 }
 /*
     gpio.on('change', (channel, value) => {
