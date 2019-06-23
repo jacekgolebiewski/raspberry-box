@@ -59,13 +59,14 @@ export class LedMatrixService {
         }
         const ascii = character.charCodeAt(0);
         const char = LedMatrixFont.SINCLAIR_FONT[ascii];
-        return this.rotate(char.map(row => {
+        const charMatrix = char.map(row => {
             const bin: String = row.toString(2);
             return bin
                 ['padStart'](8, '0')
                 .split('')
                 .map(i => parseInt(i))
-        }));
+        });
+        return this.rotate(charMatrix.reverse());
     }
 
     async setBrightness(brightness: number) {
