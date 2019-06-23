@@ -28,7 +28,7 @@ export class Application {
 
     private pinToButton: Map<number, Button> = new Map([
         [36, Button.A],
-        [38, Button.B]
+        [40, Button.B]
     ]);
 
     private gpio;
