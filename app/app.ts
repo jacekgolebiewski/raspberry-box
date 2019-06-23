@@ -8,17 +8,12 @@ export class App {
 */
 
     async start() {
-        const rpio = require('rpio')
-        rpio.init({
-            gpiomem: true,
-            mapping: 'physical'
-        });
+        const gpio = require('rpi-gpio');
 
-        console.log('Started...');
-        rpio.open(36, rpio.INPUT, rpio.PULL_DOWN);
-        rpio.poll(36, function (pin) {
-            console.log('Pressed button ' + pin);
+        gpio.on('change', function(channel, value) {
+            console.log('Channel ' + channel + ' value is now ' + value);
         });
+        gpio.setup(7, gpio.DIR_IN, gpio.EDGE_BOTH);
     }
     /*
     async start() {
