@@ -30,11 +30,6 @@ export class WebSocketClient {
         this.webSocket.on('close', () => {
             this.onDisconnect && this.onDisconnect();
         });
-        this.onConnect();
-    }
-
-    private onConnect() {
-        Logger.debug("Connected to client");
     }
 
     sendText(request, text) {

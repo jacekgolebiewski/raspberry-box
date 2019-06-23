@@ -6,7 +6,6 @@ import { WebSocketClient } from './web-socket-client';
 import { Application } from './application';
 import { ApplicationConfig } from '../shared/constants/config/application-config';
 import { ConfigKey } from '../shared/constants/config/config-key';
-import { application } from 'express';
 import { Logger } from '../service/logger/logger';
 import { Inject } from 'typescript-ioc';
 
@@ -31,6 +30,7 @@ export class WebSocketEndpoint {
         this.websocketServer.on('connection', (ws: WebSocket) => {
             Logger.info("WebSocketEndpoint: Connected new client");
             const webSocketClient = new WebSocketClient(ws);
+            Logger.trace(`this.application.onConnected(webSocketClient): ${webSocketClient}`);
             this.application.onConnected(webSocketClient);
             webSocketClient.start();
         });

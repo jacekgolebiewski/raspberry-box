@@ -18,7 +18,7 @@ export class App {
 
     async start() {
         Logger.critical(`Running with Environment.${EnvironmentUtil.currentEnvironment}`);
-        Logger.critical(`Logging level is: ${ApplicationConfig.get(ConfigKey.LOG_LEVEL)}`);
+        Logger.critical(`Logging level is: ${ApplicationConfig.get(ConfigKey.LOG_LEVEL).prefix}`);
         AppBanner.printTitle();
         this.startApplication();
         this.startEndpoint();
