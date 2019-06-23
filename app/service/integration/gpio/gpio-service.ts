@@ -22,7 +22,7 @@ export class GpioService {
     gpios: Array<Gpio> = [];
 
     init() {
-        Logger.debug(JSON.stringify(this.OPTIONS));
+        // Logger.debug(JSON.stringify(this.OPTIONS));
         // this.rpio.init(this.OPTIONS);
     }
 

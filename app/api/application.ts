@@ -39,11 +39,25 @@ export class Application {
 
     initButton(pin: number): void {
         const _this = this;
+        const rpio = require('rpio')
+        rpio.init({
+            gpiomem: true,
+            mapping: 'physical'
+        });
+
+        console.log('Started...');
+        rpio.open(36, rpio.INPUT, rpio.PULL_DOWN);
+        rpio.poll(36, function (pin) {
+            console.log('Pressed button ' + pin);
+        });
+/*
+
         Logger.debug('Initializing pin ' + pin);
         this.gpioService.openIN(pin);
         this.gpioService.poll(pin, function (nVal) {
             Logger.debug(`On poll: ${pin} = ${nVal}`);
         });
+*/
 
         /*        this.gpioService.openIN(pin);
                 this.gpioService.poll(pin, function (nVal) {
