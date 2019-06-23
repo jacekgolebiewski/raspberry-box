@@ -28,7 +28,7 @@ export class Application {
 
     pinToButton: Map<number, Button> = new Map([
         [36, Button.A],
-        [38, Button.B]
+        // [38, Button.B]
     ]);
 
 
@@ -43,10 +43,15 @@ export class Application {
         this.gpioService.openIN(pin);
         this.gpioService.poll(pin, function (nVal) {
             Logger.debug(`On poll: ${pin} = ${nVal}`);
-            _this.onButtonStateChange.apply(_this,
-                [_this.pinToButton.get(pin),
-                    nVal === 1 ? ButtonAction.PRESSED : ButtonAction.RELEASED]);
         });
+
+        /*        this.gpioService.openIN(pin);
+                this.gpioService.poll(pin, function (nVal) {
+                    Logger.debug(`On poll: ${pin} = ${nVal}`);
+                    _this.onButtonStateChange.apply(_this,
+                        [_this.pinToButton.get(pin),
+                            nVal === 1 ? ButtonAction.PRESSED : ButtonAction.RELEASED]);
+                });*/
     }
 
     onConnected(webSocketClient: WebSocketClient): any {
