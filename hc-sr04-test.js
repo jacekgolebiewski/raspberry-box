@@ -8,10 +8,13 @@ gpio.setup(TRIG, gpio.DIR_OUT);
 gpio.setup(ECHO, gpio.DIR_IN, gpio.EDGE_BOTH);
 gpio.setup(BUTTON, gpio.DIR_IN, gpio.EDGE_BOTH);
 
+gpio.read(ECHO, (err, val) => {
+    console.log('READ '+val);
+});
 
 async function readPin(pin) {
     return new Promise((resolve, reject) => {
-        gpio.read(pin, function(err, value) {
+        gpio.read(+pin, function(err, value) {
             if (err) throw err;
             resolve(pin);
         });
