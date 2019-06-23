@@ -23,7 +23,7 @@ export class GpioService {
 
     init() {
         Logger.debug(JSON.stringify(this.OPTIONS));
-        this.rpio.init(this.OPTIONS);
+        // this.rpio.init(this.OPTIONS);
     }
 
     getOrUndefined(id: number, type?: GpioType): Gpio {
