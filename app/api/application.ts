@@ -11,6 +11,8 @@ import { ButtonAction } from './model/button/button-action';
 import { ConfigurationService } from '../service/configuration-service';
 import { PropertyRequest } from './model/property-request';
 import { ScreenSaver } from './screen-saver';
+import { Gpio } from '../model/gpio';
+import { GpioType } from '../model/gpio-type';
 
 export class Application {
 
@@ -21,51 +23,37 @@ export class Application {
 
     public webSocketClient: WebSocketClient;
 
-    handlers: Map<string, ((Request) => void)> = new Map([
+    private handlers: Map<string, ((Request) => void)> = new Map([
         [ScreenRequest.TYPE_NAME, (request) => this.onScreenRequest(request)],
         [PropertyRequest.TYPE_NAME, (request) => this.onPropertyRequest(request)]
     ]);
 
-    pinToButton: Map<number, Button> = new Map([
+    private pinToButton: Map<number, Button> = new Map([
         [36, Button.A],
-        // [38, Button.B]
+        [38, Button.B]
     ]);
+
+    private gpio;
 
 
     init() {
         this.screenSaver.enable();
-        this.pinToButton.forEach((value, key) => this.initButton(key));
+        this.configureGpio();
     }
 
-    initButton(pin: number): void {
-        const _this = this;
-        const rpio = require('rpio')
-        rpio.init({
-            gpiomem: true,
-            mapping: 'physical'
+    private configureGpio() {
+        this.gpio = this.gpioService.gpioDriver;
+        this.pinToButton.forEach((value, key) => this.gpio.setup(key, this.gpio.DIR_IN, this.gpio.EDGE_BOTH));
+        this.gpio.on('change', (channel, value) => {
+            Logger.trace('Channel ' + channel + ' value is now ' + value);
+            this.onGpioChange(channel, value);
         });
+    }
 
-        console.log('Started...');
-        rpio.open(36, rpio.INPUT, rpio.PULL_DOWN);
-        rpio.poll(36, function (pin) {
-            console.log('Pressed button ' + pin);
-        });
-/*
-
-        Logger.debug('Initializing pin ' + pin);
-        this.gpioService.openIN(pin);
-        this.gpioService.poll(pin, function (nVal) {
-            Logger.debug(`On poll: ${pin} = ${nVal}`);
-        });
-*/
-
-        /*        this.gpioService.openIN(pin);
-                this.gpioService.poll(pin, function (nVal) {
-                    Logger.debug(`On poll: ${pin} = ${nVal}`);
-                    _this.onButtonStateChange.apply(_this,
-                        [_this.pinToButton.get(pin),
-                            nVal === 1 ? ButtonAction.PRESSED : ButtonAction.RELEASED]);
-                });*/
+    private onGpioChange(pin: number, value: boolean) {
+        if (this.pinToButton.get(pin) !== undefined) {
+            this.onButtonStateChange(this.pinToButton.get(pin), value ? ButtonAction.PRESSED : ButtonAction.RELEASED);
+        }
     }
 
     onConnected(webSocketClient: WebSocketClient): any {
