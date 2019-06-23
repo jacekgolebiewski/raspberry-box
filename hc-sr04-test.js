@@ -1,3 +1,5 @@
+const gpio = require('rpi-gpio');
+
 const ECHO = 36;
 const TRIG = 37;
 const BUTTON = 38;
