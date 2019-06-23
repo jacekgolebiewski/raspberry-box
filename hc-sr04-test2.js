@@ -1,6 +1,6 @@
-const ECHO = 27;
-const TRIG = 25;
-const BUTTON = 28;
+//BCM mapping
+const ECHO = 16;
+const TRIG = 26;
 
 const Gpio = require('pigpio').Gpio;
 
