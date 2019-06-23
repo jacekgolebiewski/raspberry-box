@@ -43,10 +43,11 @@ export class Application {
     private configureGpio() {
         this.gpio = this.gpioService.gpioDriver;
         this.pinToButton.forEach((value, key) => this.gpio.setup(key, this.gpio.DIR_IN, this.gpio.EDGE_BOTH));
+        const _this = this;
         this.gpio.on('change', (channel, value) => {
             Logger.trace('Channel ' + channel + ' value is now ' + value);
-            Logger.trace(StringUtil.stringify(this.webSocketClient));
-            this.onGpioChange(channel, value);
+            Logger.trace(StringUtil.stringify(_this.webSocketClient));
+            _this.onGpioChange(channel, value);
         });
     }
 
