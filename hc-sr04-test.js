@@ -20,7 +20,7 @@ async function readPin(pin) {
 async function checkDistance() {
     gpio.on('change', (channel, value) => {
         if(channel === BUTTON) {
-            console.log(`TRIG`);
+            console.log(`TRIG ${value}`);
             gpio.write(TRIG, value);
         } else {
             console.log(`Poll ${channel} val: ${value}`);
