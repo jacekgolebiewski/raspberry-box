@@ -50,7 +50,9 @@ export class Application {
         this.configureGpio();
         this.distanceMeter.init();
         this.distanceMeter.onNewDistance = (distance) => {
-            this.webSocketClient.sendMessage(undefined, new DistanceResponse(distance));
+            if(this.webSocketClient) {
+                this.webSocketClient.sendMessage(undefined, new DistanceResponse(distance));
+            }
         };
         this.distanceMeter.start();
     }
