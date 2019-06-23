@@ -17,6 +17,10 @@ async function readPin(pin) {
 }
 
 async function checkDistance() {
+    gpio.on('change', (channel, value) => {
+        console.log(`Poll ${channel} val: ${value}`);
+    });
+
     console.log('checkDistance()');
     gpio.write(TRIG, true);
     for(let i = 0; i< 10; i++) {
