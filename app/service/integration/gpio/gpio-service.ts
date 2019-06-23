@@ -10,6 +10,6 @@ import { GpioError } from './GpioError';
 @Component.default
 export class GpioService {
 
-    public gpioDriver = EnvironmentUtil.isProduction() ? require('rpi-gpio') : ComponentService.get(RpioMock);
+    public gpioDriver = EnvironmentUtil.isProduction() ? require('pigpio').Gpio : ComponentService.get(RpioMock);
 
 }

@@ -11,9 +11,10 @@ import { ButtonAction } from './model/button/button-action';
 import { ConfigurationService } from '../service/configuration-service';
 import { PropertyRequest } from './model/property-request';
 import { ScreenSaver } from './screen-saver';
-import { StringUtil } from '../shared/utils/string-util';
 import { Component } from '../component/component';
 import { RandomUtil } from '../shared/utils/random-util';
+import { DistanceMeter } from './distance-meter';
+import { DistanceRequest } from './model/distance-request';
 
 @Component.default
 @Singleton
@@ -25,21 +26,23 @@ export class Application {
     @Inject private gpioService: GpioService;
     @Inject private configurationService: ConfigurationService;
     @Inject private screenSaver: ScreenSaver;
+    private distanceMeter: DistanceMeter;
 
     private webSocketClient: WebSocketClient;
 
     private handlers: Map<string, ((Request) => void)> = new Map([
         [ScreenRequest.TYPE_NAME, (request) => this.onScreenRequest(request)],
-        [PropertyRequest.TYPE_NAME, (request) => this.onPropertyRequest(request)]
+        [PropertyRequest.TYPE_NAME, (request) => this.onPropertyRequest(request)],
+        [DistanceRequest.TYPE_NAME, (request) => this.onDistanceRequest(request)],
     ]);
 
+    //BCM mapping
     private pinToButton: Map<number, Button> = new Map([
-        [38, Button.A],
-        [40, Button.B]
+        [20, Button.A],
+        [21, Button.B]
     ]);
 
-    private gpio;
-
+    private Gpio;
 
     init() {
         this.screenSaver.enable();
@@ -47,12 +50,22 @@ export class Application {
     }
 
     private configureGpio() {
-        this.gpio = this.gpioService.gpioDriver;
-        this.pinToButton.forEach((value, key) => this.gpio.setup(key, this.gpio.DIR_IN, this.gpio.EDGE_BOTH));
-        const _this = this;
-        this.gpio.on('change', (channel, value) => {
-            Logger.trace('Channel ' + channel + ' value is now ' + value);
-            _this.onGpioChange(channel, value);
+        this.Gpio = this.gpioService.gpioDriver;
+        this.pinToButton.forEach((value, key) => {
+
+            const button = new this.Gpio(key, {
+                mode: this.Gpio.INPUT,
+                pullUpDown: this.Gpio.PUD_DOWN,
+                alert: true
+            });
+
+            button.glitchFilter(10000); // Level must be stable for 10 ms before an alert event is emitted.
+            button.on('alert', (level, tick) => {
+                if (level === 1) {
+                    Logger.trace('Channel ' + key + ' value is now ' + level);
+                    this.onGpioChange(key, level);
+                }
+            });
         });
     }
 
@@ -104,5 +117,9 @@ export class Application {
             }, +request.value);
         }
         this.configurationService.setProperty(request.key, request.value);
+    }
+
+    private onDistanceRequest(request: DistanceRequest) {
+        this.distanceMeter.getDistance();
     }
 }

@@ -1,76 +1,34 @@
-const gpio = require('rpi-gpio');
-const gpiop = gpio.promise;
+//BCM mapping
+const ECHO = 16;
+const TRIG = 26;
 
-const ECHO = 36;
-const TRIG = 37;
-const BUTTON = 38;
+const Gpio = require('pigpio').Gpio;
 
-gpio.setup(TRIG, gpio.DIR_OUT);
-gpio.setup(ECHO, gpio.DIR_IN, gpio.EDGE_BOTH);
-gpio.setup(BUTTON, gpio.DIR_IN, gpio.EDGE_BOTH);
-setTimeout(() => {
-    gpiop.read(ECHO, (err, val) => {
-        console.log('READ '+val);
-    });
-}, 1000);
+// The number of microseconds it takes sound to travel 1cm at 20 degrees celcius
+const MICROSECDONDS_PER_CM = 1e6/34321;
 
+const trigger = new Gpio(TRIG, {mode: Gpio.OUTPUT});
+const echo = new Gpio(ECHO, {mode: Gpio.INPUT, alert: true});
 
-/*
+trigger.digitalWrite(0); // Make sure trigger is low
 
-async function readPin(pin) {
-    return new Promise((resolve, reject) => {
-        gpio.read(+pin, function(err, value) {
-            if (err) throw err;
-            resolve(pin);
-        });
-    });
-}
+const watchHCSR04 = () => {
+    let startTick;
 
-async function checkDistance() {
-    gpio.on('change', (channel, value) => {
-        if(channel === BUTTON) {
-            console.log(`TRIG ${value}`);
-            gpio.write(TRIG, value);
+    echo.on('alert', (level, tick) => {
+        if (level == 1) {
+            startTick = tick;
         } else {
-            console.log(`Poll ${channel} val: ${value}`);
+            const endTick = tick;
+            const diff = (endTick >> 0) - (startTick >> 0); // Unsigned 32 bit arithmetic
+            console.log(diff / 2 / MICROSECDONDS_PER_CM);
         }
     });
-    /!*
+};
 
-        console.log('checkDistance()');
-        gpio.write(TRIG, true);
-        for(let i = 0; i< 1000; i++) {
-            console.log('Waiting...');
-        }
-        gpio.write(TRIG, false);
-        console.log('triggered');
-    *!/
+watchHCSR04();
 
-    while (true) {
-        let value = await readPin(ECHO);
-        if (value === true) {
-            break;
-        }
-    }
-    /!*    let startDate = new Date();
-        console.log('found 1 on ECHO pin');
-
-        while (true) {
-            let value = await readPin(ECHO);
-            if (value === false) {
-                break;
-            }
-        }
-        let endDate = new Date();
-        console.log('found 0 on ECHO pin');
-
-        console.log(`${startDate.getTime()} / ${endDate.getTime()}`);*!/
-}
-
-checkDistance();
-/!*
-    gpio.on('change', (channel, value) => {
-
-    });*!/
-
-*/
+// Trigger a distance measurement once per second
+setInterval(() => {
+    trigger.trigger(10, 1); // Set trigger high for 10 microseconds
+}, 1000);
