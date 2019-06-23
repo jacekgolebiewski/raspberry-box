@@ -11,6 +11,7 @@ import { ButtonAction } from './model/button/button-action';
 import { ConfigurationService } from '../service/configuration-service';
 import { PropertyRequest } from './model/property-request';
 import { ScreenSaver } from './screen-saver';
+import { StringUtil } from '../shared/utils/string-util';
 
 export class Application {
 
@@ -66,6 +67,8 @@ export class Application {
 
     private onButtonStateChange(button: Button, action: ButtonAction) {
         Logger.trace(`Changed state of button ${button} to ${action}`);
+        StringUtil.stringify(this);
+        StringUtil.stringify(this.webSocketClient);
         if (this.webSocketClient !== undefined) {
             Logger.trace(`webSocketClient available`);
             this.webSocketClient.sendMessage(undefined, new ButtonResponse(button, action));
