@@ -31,7 +31,6 @@ export class WebSocketEndpoint {
         this.websocketServer.on('connection', (ws: WebSocket) => {
             Logger.info("WebSocketEndpoint: Connected new client");
             const webSocketClient = new WebSocketClient(ws);
-            Logger.trace(`this.application.onConnected(webSocketClient): ${StringUtil.stringify(webSocketClient)}`);
             this.application.onConnected(webSocketClient);
             webSocketClient.start();
         });

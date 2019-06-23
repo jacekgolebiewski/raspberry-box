@@ -59,7 +59,8 @@ export class Application {
 
     onConnected(webSocketClient: WebSocketClient): any {
         this.screenSaver.disable();
-        Logger.trace(`Setting webSocketClient: ${StringUtil.stringify(webSocketClient)} / ${StringUtil.stringify(this.webSocketClient)}`);
+        Logger.trace(`Setting from webSocketClient: ${StringUtil.stringify(webSocketClient)}`);
+        Logger.trace(`Setting to webSocketClient: ${StringUtil.stringify(this.webSocketClient)}`);
         this.webSocketClient = webSocketClient;
         this.webSocketClient.onRequest = (request) => this.onRequest(request);
         this.webSocketClient.onDisconnect = () => {
@@ -70,7 +71,6 @@ export class Application {
 
     private onButtonStateChange(button: Button, action: ButtonAction) {
         Logger.trace(`Changed state of button ${button} to ${action}`);
-        Logger.trace(StringUtil.stringify(this));
         Logger.trace(StringUtil.stringify(this.webSocketClient));
         if (this.webSocketClient !== undefined) {
             Logger.trace(`webSocketClient available`);
