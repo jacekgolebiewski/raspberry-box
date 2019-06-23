@@ -13,11 +13,12 @@ import { StringUtil } from '../shared/utils/string-util';
 @Component.default
 export class WebSocketEndpoint {
 
-    @Inject private application: Application;
-
     server: http.Server;
     app: express.Application;
     websocketServer: WebSocket.Server;
+
+    constructor(public application: Application) {
+    }
 
     init() {
         this.app = express();
