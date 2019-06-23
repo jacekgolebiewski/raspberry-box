@@ -5,7 +5,7 @@ import { Component } from '../component/component';
 @Component.default
 export class ScreenSaver {
 
-    SCREEN_SAVER_TEXT = "confitura2019 with ISOLUTION GAME BOX";
+    SCREEN_SAVER_TEXT = "confitura2019 ISOLUTION GAME BOX-Zapraszamy";
     MIN_BRIGHTNESS = 0;
     MAX_BRIGHTNESS = 15;
 
