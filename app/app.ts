@@ -9,7 +9,7 @@ export class App {
 
     async start() {
         const gpio = require('rpi-gpio');
-
+        console.log('Started...');
         gpio.on('change', function(channel, value) {
             console.log('Channel ' + channel + ' value is now ' + value);
         });
