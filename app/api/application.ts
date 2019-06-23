@@ -67,6 +67,7 @@ export class Application {
     private onButtonStateChange(button: Button, action: ButtonAction) {
         Logger.trace(`Changed state of button ${button} to ${action}`);
         if(this.webSocketClient) {
+            Logger.trace(`webSocketClient available`);
             this.webSocketClient.sendMessage(undefined, new ButtonResponse(button, action));
         }
     }

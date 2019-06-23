@@ -43,6 +43,7 @@ export class WebSocketClient {
 
     sendMessage(request, response) {
         response.request = request;
+        Logger.trace(`Sending message ${JSON.stringify(response)}`);
         this.webSocket.send(JSON.stringify(response));
     }
 }
