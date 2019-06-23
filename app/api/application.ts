@@ -12,7 +12,9 @@ import { ConfigurationService } from '../service/configuration-service';
 import { PropertyRequest } from './model/property-request';
 import { ScreenSaver } from './screen-saver';
 import { StringUtil } from '../shared/utils/string-util';
+import { Component } from '../component/component';
 
+@Component.default
 export class Application {
 
     @Inject private ledMatrixService: LedMatrixService;
