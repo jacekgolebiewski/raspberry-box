@@ -3,6 +3,7 @@ import { EnvironmentUtil } from '../../../shared/utils/environment-util';
 import { LedMatrixDriverMock } from './led-matrix-driver-mock';
 import { Logger } from '../../logger/logger';
 import { LedMatrixFont } from './led-matrix-font';
+import { LedMatrixOptions } from './led-matrix-options';
 
 @Component.default
 export class LedMatrixService {
@@ -18,12 +19,7 @@ export class LedMatrixService {
     }
 
     init() {
-        let options = {
-            device: '/dev/spidev0.0',
-            controllerCount: 1,
-            flip: 'vertical',
-            rotate: 270
-        };
+        let options = new LedMatrixOptions();
         if (EnvironmentUtil.isProduction()) {
             let Max7219 = require('max7219-display');
             this.matrixDriver = new Max7219(options);
