@@ -11,8 +11,6 @@ import { ButtonAction } from './model/button/button-action';
 import { ConfigurationService } from '../service/configuration-service';
 import { PropertyRequest } from './model/property-request';
 import { ScreenSaver } from './screen-saver';
-import { Gpio } from '../model/gpio';
-import { GpioType } from '../model/gpio-type';
 
 export class Application {
 
@@ -61,13 +59,15 @@ export class Application {
         this.webSocketClient = webSocketClient;
         this.webSocketClient.onRequest = (request) => this.onRequest(request);
         this.webSocketClient.onDisconnect = () => {
-            Logger.debug("Client disconnected")
+            Logger.debug("Client disconnected");
             this.screenSaver.enable();
         };
     }
 
     private onButtonStateChange(button: Button, action: ButtonAction) {
-        this.webSocketClient.sendMessage(undefined, new ButtonResponse(button, action));
+        if(this.webSocketClient) {
+            this.webSocketClient.sendMessage(undefined, new ButtonResponse(button, action));
+        }
     }
 
     onRequest(request: Request): void {
