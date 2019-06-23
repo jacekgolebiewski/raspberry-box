@@ -58,6 +58,9 @@ export class LedMatrixService {
     }
 
     getCharMatrix(character: string) {
+        if(character == undefined) {
+            character = " ";
+        }
         const ascii = character.charCodeAt(0);
         const char = LedMatrixFont.SINCLAIR_FONT[ascii];
         return this.rotate(char.map(row => {

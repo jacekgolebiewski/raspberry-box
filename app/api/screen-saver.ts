@@ -26,7 +26,7 @@ export class ScreenSaver {
     private nextScreenSaverStep() {
         this.brightness = (this.brightness + 1) % (this.MAX_BRIGHTNESS + 1);
         if (this.brightness === 0) {
-            this.textIndex += 1;
+            this.textIndex = (this.textIndex + 1) % this.SCREEN_SAVER_TEXT.length;
         }
         this.ledMatrixService.setBrightness(this.brightness);
         this.ledMatrixService.charFixed(this.SCREEN_SAVER_TEXT[this.textIndex]);
