@@ -8,6 +8,7 @@ import { ApplicationConfig } from '../shared/constants/config/application-config
 import { ConfigKey } from '../shared/constants/config/config-key';
 import { Logger } from '../service/logger/logger';
 import { Inject } from 'typescript-ioc';
+import { StringUtil } from '../shared/utils/string-util';
 
 @Component.default
 export class WebSocketEndpoint {
@@ -30,7 +31,7 @@ export class WebSocketEndpoint {
         this.websocketServer.on('connection', (ws: WebSocket) => {
             Logger.info("WebSocketEndpoint: Connected new client");
             const webSocketClient = new WebSocketClient(ws);
-            Logger.trace(`this.application.onConnected(webSocketClient): ${webSocketClient}`);
+            Logger.trace(`this.application.onConnected(webSocketClient): ${StringUtil.stringify(webSocketClient)}`);
             this.application.onConnected(webSocketClient);
             webSocketClient.start();
         });
