@@ -1,7 +1,7 @@
 import { WebSocketClient } from './web-socket-client';
 import { Request } from './model/request';
 import { Logger } from '../service/logger/logger';
-import { Inject } from 'typescript-ioc';
+import { Inject, Singleton } from 'typescript-ioc';
 import { LedMatrixService } from '../service/integration/ledmatrix/led-matrix-service';
 import { ScreenRequest } from './model/screen/screen-request';
 import { GpioService } from '../service/integration/gpio/gpio-service';
@@ -16,6 +16,7 @@ import { Component } from '../component/component';
 import { RandomUtil } from '../shared/utils/random-util';
 
 @Component.default
+@Singleton
 export class Application {
 
     uid = RandomUtil.getRandom(100);
