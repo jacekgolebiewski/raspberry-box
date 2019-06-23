@@ -26,7 +26,7 @@ export class Application {
     @Inject private gpioService: GpioService;
     @Inject private configurationService: ConfigurationService;
     @Inject private screenSaver: ScreenSaver;
-    private distanceMeter: DistanceMeter;
+    private distanceMeter: DistanceMeter = new DistanceMeter();
 
     private webSocketClient: WebSocketClient;
 
@@ -47,6 +47,7 @@ export class Application {
     init() {
         this.screenSaver.enable();
         this.configureGpio();
+        this.distanceMeter.init();
     }
 
     private configureGpio() {
