@@ -9,6 +9,9 @@ import { LedMatrixOptions } from './led-matrix-options';
 export class LedMatrixService {
 
     private readonly CONTROLLER_NUMBER = 0;
+    private readonly MIN_BRIGHTNESS = 0;
+    private readonly MAX_BRIGHTNESS = 15;
+
 
     matrixDriver: LedMatrixDriverMock;
 
