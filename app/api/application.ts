@@ -45,6 +45,7 @@ export class Application {
         this.pinToButton.forEach((value, key) => this.gpio.setup(key, this.gpio.DIR_IN, this.gpio.EDGE_BOTH));
         this.gpio.on('change', (channel, value) => {
             Logger.trace('Channel ' + channel + ' value is now ' + value);
+            Logger.trace(StringUtil.stringify(this.webSocketClient));
             this.onGpioChange(channel, value);
         });
     }
