@@ -20,6 +20,7 @@ export class ScreenSaver {
     }
 
     private nextScreenSaverStep() {
+        this.textIndex = (this.textIndex + 1) % this.SCREEN_SAVER_TEXT.length;
         this.ledMatrixService.charFixed(this.SCREEN_SAVER_TEXT[this.textIndex]);
     }
 
