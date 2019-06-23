@@ -5,7 +5,7 @@ import { Component } from '../component/component';
 @Component.default
 export class ScreenSaver {
 
-    SCREEN_SAVER_TEXT = "confitura2019 ISOLUTION GAME BOX-Zapraszamy";
+    SCREEN_SAVER_TEXT = "confitura2019 ISOLUTION GAME BOX-Zapraszamy     ";
     @Inject private ledMatrixService: LedMatrixService;
 
     private enabled: boolean = false;
@@ -14,9 +14,10 @@ export class ScreenSaver {
 
     enable() {
         this.enabled = true;
+        this.textIndex = 0;
         this.interval = setInterval(() => {
             this.nextScreenSaverStep();
-        }, 500)
+        }, 1500)
     }
 
     private nextScreenSaverStep() {
