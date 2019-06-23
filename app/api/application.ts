@@ -49,9 +49,9 @@ export class Application {
         this.screenSaver.enable();
         this.configureGpio();
         this.distanceMeter.init();
-        this.distanceMeter.onNewDistance((distance) => {
+        this.distanceMeter.onNewDistance = (distance) => {
             this.webSocketClient.sendMessage(undefined, new DistanceResponse(distance));
-        });
+        };
         this.distanceMeter.start();
     }
 
