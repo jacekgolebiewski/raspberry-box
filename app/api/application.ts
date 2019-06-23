@@ -15,6 +15,7 @@ import { Component } from '../component/component';
 import { RandomUtil } from '../shared/utils/random-util';
 import { DistanceMeter } from './distance-meter';
 import { DistanceRequest } from './model/distance-request';
+import { DistanceResponse } from './model/distance/distance-response';
 
 @Component.default
 @Singleton
@@ -48,6 +49,10 @@ export class Application {
         this.screenSaver.enable();
         this.configureGpio();
         this.distanceMeter.init();
+        this.distanceMeter.onNewDistance((distance) => {
+            this.webSocketClient.sendMessage(undefined, new DistanceResponse(distance));
+        });
+        this.distanceMeter.start();
     }
 
     private configureGpio() {

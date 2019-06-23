@@ -10,6 +10,10 @@ export class DistanceMeter {
 
     @Inject private gpioService: GpioService;
 
+    private interval;
+    private lastDistance = 0;
+    public onNewDistance: (number) => void;
+
     private Gpio;
     private trigger;
     private echo;
@@ -25,8 +29,18 @@ export class DistanceMeter {
         this.watchHCSR04();
     }
 
+    start() {
+        this.interval = setInterval(() => {
+            this.getDistance();
+        }, 500)
+    }
+
+    stop() {
+        clearInterval(this.interval);
+    }
+
     getDistance() {
-        this.trigger.trigger(10, 1);
+        this.trigger.trigger(10, 1); // set 1 for 10 ms
     }
 
     watchHCSR04() {
@@ -36,7 +50,8 @@ export class DistanceMeter {
             } else {
                 this.endTick = tick;
                 const diff = (this.endTick >> 0) - (this.startTick >> 0); // Unsigned 32 bit arithmetic
-                console.log(diff / 2 / this.MICROSECDONDS_PER_CM);
+                let distanceInCm = diff / 2 / this.MICROSECDONDS_PER_CM;
+                this.onNewDistance && this.onNewDistance(distanceInCm);
             }
         });
     }
