@@ -20,7 +20,7 @@ export class Application {
     @Inject private configurationService: ConfigurationService;
     @Inject private screenSaver: ScreenSaver;
 
-    public webSocketClient: WebSocketClient;
+    private webSocketClient: WebSocketClient;
 
     private handlers: Map<string, ((Request) => void)> = new Map([
         [ScreenRequest.TYPE_NAME, (request) => this.onScreenRequest(request)],
@@ -59,6 +59,7 @@ export class Application {
 
     onConnected(webSocketClient: WebSocketClient): any {
         this.screenSaver.disable();
+        Logger.trace(`Setting webSocketClient: ${StringUtil.stringify(webSocketClient)} / ${StringUtil.stringify(this.webSocketClient)}`);
         this.webSocketClient = webSocketClient;
         this.webSocketClient.onRequest = (request) => this.onRequest(request);
         this.webSocketClient.onDisconnect = () => {
