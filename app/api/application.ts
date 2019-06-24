@@ -33,8 +33,8 @@ export class Application {
 
     private handlers: Map<string, ((Request) => void)> = new Map([
         [ScreenRequest.TYPE_NAME, (request) => this.onScreenRequest(request)],
-        [PropertyRequest.TYPE_NAME, (request) => this.onPropertyRequest(request)],
         [DistanceRequest.TYPE_NAME, (request) => this.onDistanceRequest(request)],
+        [PropertyRequest.TYPE_NAME, (request) => this.onPropertyRequest(request)]
     ]);
 
     //BCM mapping

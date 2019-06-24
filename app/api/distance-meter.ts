@@ -40,7 +40,7 @@ export class DistanceMeter {
     }
 
     getDistance() {
-        this.trigger.trigger(10, 1); // set 1 for 10 ms
+        this.trigger.trigger(10, 1); // set UP for 10 ms
     }
 
     watchHCSR04() {

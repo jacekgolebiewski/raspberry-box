@@ -5,7 +5,7 @@ import { Component } from '../component/component';
 @Component.default
 export class ScreenSaver {
 
-    SCREEN_SAVER_TEXT = "confitura2019 ISOLUTION GAME BOX-Zapraszamy     ";
+    SCREEN_SAVER_TEXT = "confitura2019 ISOLUTION GAME BOX Zapraszamy   ";
     @Inject private ledMatrixService: LedMatrixService;
 
     private enabled: boolean = false;

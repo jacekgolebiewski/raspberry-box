@@ -1,3 +1,3 @@
 #!/bin/sh
 
-git pull || npm install && sudo npm start
+sudo npm start
