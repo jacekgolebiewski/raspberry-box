@@ -1,0 +1,19 @@
+{
+  "compilerOptions": {
+    "lib": ["es6"],
+    "module": "commonjs",
+    "target": "es5",
+    "sourceMap": true,
+    "outDir": "dist",
+    "declaration": true,
+    "experimentalDecorators": true,
+    "emitDecoratorMetadata": true
+  },
+  "include": [
+    "app/**/*.ts",
+    "../rpi-api/**/*.ts"
+  ],
+  "exclude": [
+    "node_modules"
+  ]
+}
