@@ -28,6 +28,13 @@ systemctl daemon-reload
 ```
 * Reboot 
 
+## Read logs
+```
+journalctl -xe
+journalctl -u raspberry-box.service --no-pager -f -n 100
+tail -f -n 100 log/forever.log
+```
+
 
 
 
