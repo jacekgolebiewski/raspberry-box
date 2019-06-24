@@ -32,7 +32,7 @@ export class DistanceMeter {
     start() {
         this.interval = setInterval(() => {
             this.getDistance();
-        }, 500)
+        }, 200)
     }
 
     stop() {
