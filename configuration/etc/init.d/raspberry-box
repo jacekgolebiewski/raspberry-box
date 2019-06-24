@@ -1,0 +1,24 @@
+#!/bin/sh
+
+### BEGIN INIT INFO
+# Provides:          raspberry-box
+# Default-Start:     5
+# Default-Stop:      0 6
+# Short-Description: Start raspberry-box at boot time
+# Description:       Enable service provided by daemon.
+### END INIT INFO
+
+export PATH=$PATH:/usr/local/bin
+export NODE_PATH=$NODE_PATH:/usr/local/lib/node_modules
+
+case "$1" in
+  start)
+  exec forever --sourceDir=/home/pi/apps/raspberry-box -p /home/pi/apps/raspberry-box/log -a -l forever.log -o out.log -e err.log start -c /bin/bash update-and-run.sh
+  ;;
+
+  stop)
+  exec forever --sourceDir=/home/pi/apps/raspberry-box stop -c /bin/bash update-and-run.sh
+  ;;
+esac
+
+exit 0

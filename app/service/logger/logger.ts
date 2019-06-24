@@ -26,7 +26,7 @@ export class Logger {
     };
 
     private static appendPrefix(level: LogLevel, message: string) {
-        return level.prefix + ": " + message;
+        return new Date().toLocaleString() + " | " + level.prefix + ": " + message;
     }
 
     private static injectData(message: string, data: any) {
