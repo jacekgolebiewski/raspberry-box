@@ -104,6 +104,7 @@ export class Application {
 
     onRequest(request: Request): void {
         Logger.debug(`onRequest:request.type = ${request.type}`);
+        this.screenSaver.disable();
         let handler = this.handlers.get(request.type);
         if (handler !== undefined) {
             handler(request);

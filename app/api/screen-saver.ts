@@ -16,7 +16,9 @@ export class ScreenSaver {
         this.enabled = true;
         this.textIndex = 0;
         this.interval = setInterval(() => {
-            this.nextScreenSaverStep();
+            if(this.enabled) {
+                this.nextScreenSaverStep();
+            }
         }, 1500)
     }
 
