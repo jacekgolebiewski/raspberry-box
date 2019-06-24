@@ -89,6 +89,7 @@ export class Application {
         this.webSocketClient.onDisconnect = () => {
             Logger.debug("Client disconnected");
             this.screenSaver.enable();
+            this.webSocketClient = undefined;
         };
     }
 
