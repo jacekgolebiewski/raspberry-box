@@ -2,7 +2,7 @@ import { Environment } from '../constants/environment';
 import { NodeUtil } from './node-util';
 
 export class EnvironmentUtil {
-    private static GPIO_LIB_NAME = 'rpi-gpio';
+    private static GPIO_LIB_NAME = 'pigpio';
     private static _env: Environment;
 
     static get currentEnvironment(): Environment {

@@ -5,7 +5,7 @@ import { Component } from '../../../component/component';
 @Component.default
 export class GpioService {
 
-    public gpioDriver = EnvironmentUtil.isProduction() ? require('pigpio').Gpio : ComponentService.get(GpioServiceMock);
+    public gpioDriver = EnvironmentUtil.isProduction() ? require('pigpio').Gpio : new GpioServiceMock();
 
 }
 

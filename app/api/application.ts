@@ -8,7 +8,6 @@ import { GpioService } from '../service/integration/gpio/gpio-service';
 import { ButtonResponse } from './model/button/button-response';
 import { Button } from './model/button/button';
 import { ButtonAction } from './model/button/button-action';
-import { ConfigurationService } from '../service/configuration-service';
 import { PropertyRequest } from './model/property-request';
 import { ScreenSaver } from './screen-saver';
 import { Component } from '../component/component';
@@ -25,7 +24,6 @@ export class Application {
 
     @Inject private ledMatrixService: LedMatrixService;
     @Inject private gpioService: GpioService;
-    @Inject private configurationService: ConfigurationService;
     @Inject private screenSaver: ScreenSaver;
     private distanceMeter: DistanceMeter = new DistanceMeter();
 
@@ -124,7 +122,6 @@ export class Application {
                 this.webSocketClient.sendText(request, `${request.value}ms delayed test response`);
             }, +request.value);
         }
-        this.configurationService.setProperty(request.key, request.value);
     }
 
     private onDistanceRequest(request: DistanceRequest) {

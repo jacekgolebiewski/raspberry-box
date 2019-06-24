@@ -17,7 +17,7 @@ case "$1" in
   ;;
 
   stop)
-  exec forever --sourceDir=/home/pi/apps/raspberry-box stop -c /bin/bash update-and-run.sh
+  exec forever --sourceDir=/home/pi/apps/raspberry-box stop --killTree -c /bin/bash update-and-run.sh
   ;;
 esac
 

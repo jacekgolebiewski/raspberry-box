@@ -35,6 +35,13 @@ journalctl -u raspberry-box.service --no-pager -f -n 100
 tail -f -n 100 log/forever.log
 ```
 
+## Manage daemon status
+```
+systemctl stop raspberry-box.service
+systemctl status raspberry-box.service
+systemctl start raspberry-box.service
+```
+
 
 
 
