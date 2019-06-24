@@ -11,6 +11,11 @@ Simple Typescript Node application with WebSocket API to write games/application
 
 ## Circuit
 
+WARNING! The circuit above is only for informational purpose, I will not accept responsibility
+for any damage caused by connecting circuit depending on above.<br> 
+It's on you to decide if it suites your needs and if you want to do it.
+
+Circuit is depending on `raspberry pi 3 b+ (j8 gpio header)`.
 ![circuit_scheme](docs/circuit.png?raw=true "circuit.png")
 
 ## Configuration
@@ -36,7 +41,7 @@ which can fail to install: `npm install --no-optional`
 Application depends on:<br>
 `max7219-display` - to control led matrix using SPI interface<br>
 `pigpio` - to control gpio's: hc-sr04 and buttons<br>
-`other common packages` - support for http, websocket, typescript, tests
+`other common packages` - support for http, websocket and typescript
 
 ### Problem with rpio
 
