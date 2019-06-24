@@ -41,6 +41,12 @@ systemctl stop raspberry-box.service
 systemctl status raspberry-box.service
 systemctl start raspberry-box.service
 ```
+Note: currently stop is not working well, as forever is not killing child process.<br> 
+If you want to stop app you have to do it manually:
+```
+ps -aux | grep node
+kill -9 <pid>
+```
 
 
 
