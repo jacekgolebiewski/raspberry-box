@@ -9,6 +9,10 @@ Simple Typescript Node application with WebSocket API to write games/application
 * HC-SR04 ultrasonic sensor
 * 2x tact switch
 
+## System architecture
+
+![architecture](docs/architecture.png?raw=true "architecture.png")
+
 ## Circuit
 
 WARNING! The circuit above is only for informational purpose, I will not accept responsibility
@@ -22,7 +26,7 @@ Circuit is depending on `raspberry pi 3 b+ (j8 gpio header)`.
 
 For configuration instructions see `configuration/configuration.md` file.
 
-## Issues && improvements
+## Issues & improvements
 
 Note that this is a simple project/idea and it may contain some bugs, but I am not planning to do a lot of code here. 
 If you want to enchance or fix it feel free to fork this repo.
