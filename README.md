@@ -47,9 +47,12 @@ Application depends on:<br>
 `pigpio` - to control gpio's: hc-sr04 and buttons<br>
 `other common packages` - support for http, websocket and typescript
 
-### Problem with rpio
+##### Problem with rpio
 
 I planned to use `https://github.com/jperkin/node-rpio` library for gpio support, 
 but it crashed on gpio polling on kernel 4.14<br>
 
 ref: https://github.com/raspberrypi/linux/issues/2550
+
+## References
+Java client: https://github.com/jacekgolebiewski/raspberry-box-client-java
