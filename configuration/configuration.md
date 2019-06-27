@@ -4,7 +4,7 @@
 NOTE: configuration below was tested on:
 `Linux raspberrypi 4.14.98-v7+ #1200 SMP Tue Feb 12 20:27:48 GMT 2019 armv7l`
 with image `2019-04-08-raspbian-stretch-full`.
-You may need to some details if you're working with different version
+You may need to change some details if you're working with different version
 
 ## Configuration guide
 
