@@ -2,6 +2,8 @@
 
 Simple Typescript Node application with WebSocket API to write games/applications on DIY gamebox.
 
+![photo](docs/photo.jpg?raw=true "photo.png")
+
 ## Components
 
 * RaspberryPI 3 B+
