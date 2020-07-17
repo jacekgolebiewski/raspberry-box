@@ -9,7 +9,7 @@
   "license": "MIT",
   "dependencies": {
     "express": "^4.16.3",
-    "lodash": "^4.17.4",
+    "lodash": "^4.17.19",
     "typescript-ioc": "^1.2.5",
     "ws": "^7.0.0"
   },
